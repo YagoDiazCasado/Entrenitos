@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenitos SPA</title>
+    <link rel="stylesheet" href="estilos2.css">
+</head>
+
+<body>
+
+    <section id="login-view" class="view-section active-view">
+        <h1>Entrenitos - Iniciar Sesión</h1>
+        <button id="btn-to-register" class="btn-secondary">¿No tienes cuenta? Regístrate aquí</button>
+
+        <form id="login-form" style="margin-top: 1.5rem;">
+            <input type="text" id="login-id" placeholder="ID de Usuario" required>
+            <input type="password" id="login-pwd" placeholder="Contraseña" required>
+            <button type="submit">Entrar a mis rutinas</button>
+        </form>
+    </section>
+
+    <section id="register-view" class="view-section">
+        <h1>Crear Cuenta Nueva</h1>
+        <button id="btn-to-login" class="btn-secondary">¿Ya tienes cuenta? Volver al Login</button>
+
+        <form id="register-form" style="margin-top: 1.5rem;">
+            <input type="text" id="reg-id" placeholder="Elige un ID de Usuario" required>
+            <input type="password" id="reg-pass" placeholder="Contraseña" required>
+            <button type="submit">Registrarme e Iniciar Sesión</button>
+        </form>
+    </section>
+
+    <section id="menu-view" class="view-section">
+        <div class="flex-row border-divider">
+            <h1 id="menu-title" class="w-70" style="margin-bottom: 0;">Hola</h1>
+            <button id="btn-logout" class="btn-danger w-25" style="margin-bottom: 0;">Salir</button>
+        </div>
+
+        <div id="entrenamiento-hoy" style="margin-bottom: 2rem;">
+            <h2>Entrenamiento de Hoy</h2>
+            <h3 id="hoy-fecha">Calculando...</h3>
+            <div id="hoy-contenido"></div>
+        </div>
+
+        <button id="btn-go-edit" class="btn-secondary">Gestión y Edición de Rutinas</button>
+    </section>
+
+    <section id="edit-view" class="view-section">
+        <div class="flex-row border-divider">
+            <h1 class="w-70" style="margin-bottom: 0;">Gestión de Ciclos</h1>
+            <button id="btn-go-menu" class="btn-secondary w-25" style="margin-bottom: 0;">Volver al Menú</button>
+        </div>
+
+        <span id="save-status" class="status-label" style="display: block; margin-bottom: 1.5rem;"></span>
+
+        <div class="flex-row border-divider">
+            <input type="text" id="input-nuevo-ciclo" placeholder="Nombre del nuevo ciclo (ej: Volumen)" class="w-70">
+            <button id="btn-crear-ciclo" class="w-25">+ Crear Ciclo</button>
+        </div>
+
+        <div class="flex-row border-divider">
+            <select id="select-ciclo" class="w-70"></select>
+            <label class="w-25"><input type="checkbox" id="chk-ciclo-activo"> Siguiendo este ciclo</label>
+        </div>
+
+        <div id="semanas-container"></div>
+
+        <div class="flex-row border-divider" style="padding-top: 1rem;">
+            <button id="btn-add-semana" class="btn-secondary w-25">+ Añadir Semana</button>
+            <button id="btn-guardar-ciclo" class="w-70">Guardar Todo el Ciclo</button>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script src="manejadores.js"></script>
+    <script src="ui.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => UIController.init());
+    </script>
+</body>
+
+</html>

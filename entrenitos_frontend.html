@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Entrenitos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ══════════════════════════════════════════
+   VARIABLES & RESET
+══════════════════════════════════════════ */
+:root {
+  --bg:      #0f0f12;
+  --surface: #18181f;
+  --card:    #1e1e28;
+  --border:  #2a2a38;
+  --accent:  #e8ff47;
+  --accent2: #ff6b35;
+  --text:    #e8e8f0;
+  --muted:   #6b6b80;
+  --danger:  #ff4757;
+  --success: #2ed573;
+  --radius:  10px;
+  --font-head: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --api: 'http://localhost:5000/api/entrenitos';
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Utilidades ─────────────────────────── */
+.hidden   { display: none !important; }
+.flex     { display: flex; }
+.col      { flex-direction: column; }
+.gap-sm   { gap: .5rem; }
+.gap-md   { gap: 1rem; }
+.gap-lg   { gap: 1.5rem; }
+.center   { align-items: center; justify-content: center; }
+.wrap     { flex-wrap: wrap; }
+
+/* ── Botones ────────────────────────────── */
+.btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: .85rem;
+  padding: .55rem 1.2rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: transform .12s, opacity .12s;
+  letter-spacing: .03em;
+}
+.btn:active { transform: scale(.96); }
+.btn-accent  { background: var(--accent);  color: #0f0f12; }
+.btn-ghost   { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger  { background: var(--danger); color: #fff; }
+.btn-sm      { font-size: .78rem; padding: .35rem .8rem; }
+.btn-icon    { padding: .35rem .6rem; font-size: 1rem; border-radius: 6px; }
+
+/* ── Inputs ─────────────────────────────── */
+input[type=text], input[type=password], input[type=number], select, textarea {
+  font-family: var(--font-body);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  padding: .55rem .85rem;
+  font-size: .9rem;
+  width: 100%;
+  transition: border-color .15s;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+input[type=checkbox] { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); cursor: pointer; }
+
+/* ── Toasts ─────────────────────────────── */
+#toast-box {
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  display: flex; flex-direction: column; gap: .5rem;
+  z-index: 9999; pointer-events: none;
+}
+.toast {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  padding: .75rem 1.2rem;
+  border-radius: var(--radius);
+  font-size: .85rem;
+  max-width: 320px;
+  animation: slideIn .25s ease;
+  pointer-events: auto;
+}
+.toast.error   { border-left-color: var(--danger); }
+.toast.success { border-left-color: var(--success); }
+@keyframes slideIn { from { opacity:0; transform: translateX(40px); } to { opacity:1; transform: translateX(0); } }
+
+/* ══════════════════════════════════════════
+   VISTA LOGIN
+══════════════════════════════════════════ */
+#view-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 20%, rgba(232,255,71,.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 35% at 20% 80%, rgba(255,107,53,.06) 0%, transparent 60%),
+    var(--bg);
+}
+
+.login-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.login-logo {
+  font-family: var(--font-head);
+  font-size: 3.5rem;
+  letter-spacing: .05em;
+  color: var(--accent);
+  line-height: 1;
+}
+.login-logo span { color: var(--accent2); }
+
+.login-sub {
+  font-size: .82rem;
+  color: var(--muted);
+  margin-top: -.8rem;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.form-group { display: flex; flex-direction: column; gap: .4rem; }
+.form-group label { font-size: .78rem; color: var(--muted); font-weight: 500; letter-spacing: .05em; text-transform: uppercase; }
+
+/* ══════════════════════════════════════════
+   LAYOUT PRINCIPAL
+══════════════════════════════════════════ */
+#app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ────────────────────────────── */
+#sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.sidebar-logo {
+  font-family: var(--font-head);
+  font-size: 2rem;
+  color: var(--accent);
+  letter-spacing: .06em;
+}
+.sidebar-logo span { color: var(--accent2); }
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  padding: .6rem .85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--muted);
+  transition: background .15s, color .15s;
+}
+.nav-item:hover      { background: var(--card); color: var(--text); }
+.nav-item.active     { background: rgba(232,255,71,.1); color: var(--accent); }
+.nav-item .icon      { font-size: 1.1rem; }
+
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+#lbl-cliente-sidebar {
+  font-size: .78rem;
+  color: var(--muted);
+  padding: 0 .5rem;
+}
+
+/* ── Main ───────────────────────────────── */
+#main { padding: 2rem 1.5rem; overflow-y: auto; }
+
+.page-title {
+  font-family: var(--font-head);
+  font-size: 2.2rem;
+  letter-spacing: .04em;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+.page-title span { color: var(--accent); }
+
+/* ══════════════════════════════════════════
+   VISTA MENÚ (HOY)
+══════════════════════════════════════════ */
+.day-header-card {
+  background: linear-gradient(135deg, rgba(232,255,71,.12), rgba(232,255,71,.03));
+  border: 1px solid rgba(232,255,71,.25);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.day-header-card .day-label {
+  font-family: var(--font-head);
+  font-size: 2rem;
+  color: var(--accent);
+  letter-spacing: .05em;
+}
+.day-header-card .day-sub {
+  font-size: .82rem;
+  color: var(--muted);
+  margin-top: .15rem;
+}
+.day-header-card .kcal-badge {
+  display: inline-block;
+  background: rgba(255,107,53,.18);
+  color: var(--accent2);
+  border-radius: 6px;
+  font-size: .8rem;
+  font-weight: 600;
+  padding: .25rem .65rem;
+  margin-top: .6rem;
+}
+
+.rest-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+.rest-card .rest-icon { font-size: 2.5rem; display: block; margin-bottom: .5rem; }
+
+.exercise-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.exercise-table th {
+  text-align: left;
+  padding: .6rem .8rem;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.exercise-table td {
+  padding: .7rem .8rem;
+  border-bottom: 1px solid rgba(42,42,56,.6);
+}
+.exercise-table tr:last-child td { border-bottom: none; }
+.exercise-table tbody tr:hover td { background: rgba(232,255,71,.03); }
+
+.table-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* ══════════════════════════════════════════
+   VISTA EDICIÓN
+══════════════════════════════════════════ */
+.section-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.section-card h3 {
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 1rem;
+}
+
+/* Selector de ciclos */
+.cycle-tabs { display: flex; flex-wrap: wrap; gap: .5rem; }
+.cycle-tab {
+  padding: .45rem 1rem;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--muted);
+  transition: all .15s;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.cycle-tab:hover { border-color: var(--accent); color: var(--text); }
+.cycle-tab.selected { background: var(--accent); color: #0f0f12; border-color: var(--accent); }
+.cycle-tab .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+.cycle-tab:not(.selected) .dot { background: var(--muted); }
+
+/* Semanas accordion */
+.semana-item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: .6rem;
+  overflow: hidden;
+}
+.semana-header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .8rem 1rem;
+  cursor: pointer;
+  background: var(--surface);
+  user-select: none;
+  transition: background .12s;
+}
+.semana-header:hover { background: rgba(42,42,56,.7); }
+.semana-header .s-name { font-weight: 600; font-size: .9rem; flex: 1; }
+.semana-header .chevron { transition: transform .2s; font-size: .9rem; color: var(--muted); }
+.semana-header.open .chevron { transform: rotate(90deg); }
+.semana-body { display: none; padding: 1rem; background: var(--card); }
+.semana-body.open { display: block; }
+
+/* Días grid */
+.dias-grid { display: grid; gap: .5rem; }
+.dia-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 60px auto;
+  align-items: center;
+  gap: .6rem;
+  padding: .5rem .75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color .12s;
+}
+.dia-row:hover { border-color: var(--accent); }
+.dia-row.selected { border-color: var(--accent); background: rgba(232,255,71,.05); }
+.dia-row .dia-name { font-weight: 600; font-size: .85rem; }
+.dia-row .kcal-input { width: 100%; }
+
+/* Ejercicios spreadsheet */
+.ejercicios-wrap { overflow-x: auto; }
+.ejercicios-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+.ejercicios-table th {
+  background: var(--surface);
+  text-align: left;
+  padding: .55rem .7rem;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  position: sticky;
+  top: 0;
+}
+.ejercicios-table td { padding: .3rem .4rem; border-bottom: 1px solid var(--border); }
+.ejercicios-table td input {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: .3rem .5rem;
+  font-size: .85rem;
+}
+.ejercicios-table td input:focus { background: var(--surface); border-color: var(--accent); }
+.ejercicios-table td .btn-danger { padding: .28rem .55rem; font-size: .85rem; }
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 700px) {
+  #app { grid-template-columns: 1fr; }
+  #sidebar {
+    flex-direction: row;
+    height: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: .75rem 1rem;
+    gap: .5rem;
+    align-items: center;
+    overflow-x: auto;
+  }
+  .sidebar-logo { font-size: 1.4rem; white-space: nowrap; }
+  .nav-item .nav-label { display: none; }
+  .sidebar-footer { display: none; }
+  #main { padding: 1rem; }
+  .dia-row { grid-template-columns: 90px 1fr 55px auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TOAST BOX ══════════════════════════════════════ -->
+<div id="toast-box"></div>
+
+<!-- ══ VISTA LOGIN ════════════════════════════════════ -->
+<div id="view-login">
+  <div class="login-card">
+    <div>
+      <div class="login-logo">ENTRE<span>NITOS</span></div>
+      <div class="login-sub">Tu plan de entrenamiento</div>
+    </div>
+    <div class="form-group">
+      <label for="inp-id">Usuario</label>
+      <input type="text" id="inp-id" placeholder="ID de cliente" autocomplete="username" />
+    </div>
+    <div class="form-group">
+      <label for="inp-pwd">Contraseña</label>
+      <input type="password" id="inp-pwd" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="btn btn-accent" id="btn-login" style="width:100%;padding:.7rem;">Entrar →</button>
+    <p style="text-align:center;font-size:.78rem;color:var(--muted);">
+      ¿Sin cuenta? <a href="#" id="lnk-register" style="color:var(--accent);text-decoration:none;">Regístrate aquí</a>
+    </p>
+  </div>
+</div>
+
+<!-- ══ APP PRINCIPAL ══════════════════════════════════ -->
+<div id="app" class="hidden">
+
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">E<span>.</span></div>
+    <div class="nav-item active" data-view="menu" id="nav-menu">
+      <span class="icon">🏋️</span><span class="nav-label">Hoy</span>
+    </div>
+    <div class="nav-item" data-view="edit" id="nav-edit">
+      <span class="icon">✏️</span><span class="nav-label">Editar</span>
+    </div>
+    <div class="sidebar-footer">
+      <span id="lbl-cliente-sidebar"></span>
+      <button class="btn btn-ghost btn-sm" id="btn-logout">Salir</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main id="main">
+    <!-- ── Vista: Menú ───────────────────── -->
+    <div id="view-menu">
+      <div class="page-title" id="menu-title">HOY</div>
+      <div id="menu-content"></div>
+    </div>
+
+    <!-- ── Vista: Edición ───────────────── -->
+    <div id="view-edit" class="hidden">
+      <div class="page-title">EDITAR <span>CICLOS</span></div>
+
+      <!-- Selector de ciclo -->
+      <div class="section-card">
+        <h3>Ciclos</h3>
+        <div class="cycle-tabs" id="cycle-tabs"></div>
+        <div style="margin-top:.85rem;display:flex;gap:.5rem;flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm" id="btn-new-ciclo">+ Nuevo ciclo</button>
+          <button class="btn btn-ghost btn-sm" id="btn-toggle-siguiendo">☑ Activar este ciclo</button>
+        </div>
+      </div>
+
+      <!-- Semanas -->
+      <div class="section-card" id="card-semanas">
+        <h3>Semanas del ciclo</h3>
+        <div id="semanas-list"></div>
+        <button class="btn btn-ghost btn-sm" id="btn-add-semana" style="margin-top:.5rem;">+ Añadir semana</button>
+      </div>
+
+      <!-- Editor de ejercicios -->
+      <div class="section-card hidden" id="card-ejercicios">
+        <h3 id="ejercicios-title">Ejercicios</h3>
+        <div class="ejercicios-wrap">
+          <table class="ejercicios-table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Series</th>
+                <th>Reps</th>
+                <th>Descanso</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="ejercicios-tbody"></tbody>
+          </table>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btn-add-ej" style="margin-top:.75rem;">+ Añadir ejercicio</button>
+      </div>
+
+      <!-- Guardar -->
+      <button class="btn btn-accent" id="btn-save" style="width:100%;padding:.8rem;font-size:1rem;">💾 Guardar ciclo</button>
+    </div>
+  </main>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── Configuración ─────────────────────── */
+const API = 'http://localhost:5000/api/entrenitos';
+const DIAS_SEMANA = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+/* ── Estado global ─────────────────────── */
+let STATE = {
+  cliente: null,   // objeto Cliente
+  token:   null,
+  cicloKey: null,  // nombre del ciclo seleccionado
+  diaRef:   null,  // { semanaIdx, diaIdx }
+};
+
+/* ══════════════════════════════════════════
+   UTILIDADES
+══════════════════════════════════════════ */
+function toast(msg, type='info') {
+  const box = document.getElementById('toast-box');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  box.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function save() { sessionStorage.setItem('ent_state', JSON.stringify(STATE)); }
+function load() {
+  const raw = sessionStorage.getItem('ent_state');
+  if (raw) STATE = JSON.parse(raw);
+}
+
+async function apiFetch(path, opts={}) {
+  const headers = { 'Content-Type': 'application/json', ...(opts.headers||{}) };
+  if (STATE.token) headers['X-Token'] = STATE.token;
+  const res = await fetch(API + path, { ...opts, headers });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json.error || `Error ${res.status}`);
+  return json;
+}
+
+/* ══════════════════════════════════════════
+   ROUTING DE VISTAS
+══════════════════════════════════════════ */
+function showView(name) {
+  document.getElementById('view-login').classList.add('hidden');
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('view-menu').classList.add('hidden');
+  document.getElementById('view-edit').classList.add('hidden');
+
+  if (name === 'login') {
+    document.getElementById('view-login').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById(`view-${name}`).classList.remove('hidden');
+
+  // Nav active
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`nav-${name}`)?.classList.add('active');
+
+  if (name === 'menu') renderMenu();
+  if (name === 'edit') renderEdit();
+}
+
+/* ══════════════════════════════════════════
+   LÓGICA DE ENTRENAMIENTO (MENÚ)
+══════════════════════════════════════════ */
+function calcularDiaHoy(ciclo) {
+  if (!ciclo.fechaActivacion && !ciclo.FechaActivacion) return null;
+  const fechaStr = ciclo.fechaActivacion || ciclo.FechaActivacion;
+  const inicio = new Date(fechaStr);
+  const hoy    = new Date();
+
+  // Normalizar a medianoche
+  inicio.setHours(0,0,0,0);
+  hoy.setHours(0,0,0,0);
+
+  const diffDays = Math.floor((hoy - inicio) / 86400000);
+  if (diffDays < 0) return null;
+
+  const semanas = ciclo.listaSemanas || ciclo.ListaSemanas || [];
+  const totalDias = semanas.reduce((acc, s) => {
+    const dias = s.listaDias || s.ListaDias || [];
+    return acc + dias.length;
+  }, 0);
+
+  if (totalDias === 0) return null;
+  const diaGlobal = diffDays % totalDias;
+
+  let count = 0;
+  for (let si = 0; si < semanas.length; si++) {
+    const dias = semanas[si].listaDias || semanas[si].ListaDias || [];
+    for (let di = 0; di < dias.length; di++) {
+      if (count === diaGlobal) {
+        return { semana: semanas[si], dia: dias[di], semanaIdx: si+1, diaIdx: di+1 };
+      }
+      count++;
+    }
+  }
+  return null;
+}
+
+function renderMenu() {
+  const mc = document.getElementById('menu-content');
+  const title = document.getElementById('menu-title');
+  const c = STATE.cliente;
+  if (!c) return;
+
+  const idCliente = c.idCliente || c.IdCliente || c.id_Cliente;
+  title.innerHTML = `HOLA, <span>${idCliente}</span>`;
+  document.getElementById('lbl-cliente-sidebar').textContent = idCliente;
+
+  const mapaCiclos = c.mapaCiclos || c.MapaCiclos || {};
+  const cicloActivo = Object.values(mapaCiclos).find(ci => ci.siguiendo || ci.Siguiendo);
+
+  if (!cicloActivo) {
+    mc.innerHTML = `<div class="rest-card">
+      <span class="rest-icon">😴</span>
+      No hay ningún ciclo activo. Ve a <strong>Editar</strong> y activa uno.
+    </div>`;
+    return;
+  }
+
+  const info = calcularDiaHoy(cicloActivo);
+  if (!info) {
+    mc.innerHTML = `<div class="rest-card"><span class="rest-icon">⏳</span>El ciclo comienza próximamente.</div>`;
+    return;
+  }
+
+  const { semana, dia, semanaIdx, diaIdx } = info;
+  const nombreSemana = semana.nombreSemana || semana.NombreSemana || `Semana ${semanaIdx}`;
+  const nombreDia    = dia.nombreDia || dia.NombreDia || DIAS_SEMANA[diaIdx-1];
+  const activo       = dia.activo !== undefined ? dia.activo : dia.Activo;
+  const kcal         = dia.kcal || dia.Kcal || 0;
+  const ejercicios   = dia.listaEjercicios || dia.ListaEjercicios || [];
+
+  let html = `
+    <div class="day-header-card">
+      <div class="day-label">${nombreDia} · ${nombreSemana}</div>
+      <div class="day-sub">${cicloActivo.nombre || cicloActivo.Nombre}</div>
+      ${kcal ? `<div class="kcal-badge">🔥 ${kcal} kcal</div>` : ''}
+    </div>`;
+
+  if (!activo) {
+    html += `<div class="rest-card">
+      <span class="rest-icon">🛋️</span>
+      Hoy toca descanso, ¡recupera fuerzas!
+    </div>`;
+  } else if (ejercicios.length === 0) {
+    html += `<div class="rest-card"><span class="rest-icon">📋</span>No hay ejercicios para hoy.</div>`;
+  } else {
+    html += `<div class="table-wrap">
+      <table class="exercise-table">
+        <thead><tr>
+          <th>#</th><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th>
+        </tr></thead>
+        <tbody>
+          ${ejercicios.map((ej, i) => `
+            <tr>
+              <td style="color:var(--muted)">${i+1}</td>
+              <td><strong>${ej.nombre||ej.Nombre}</strong>
+                ${(ej.descripcion||ej.Descripcion) ? `<br><small style="color:var(--muted)">${ej.descripcion||ej.Descripcion}</small>` : ''}
+              </td>
+              <td>${ej.series||ej.Series}</td>
+              <td>${ej.repeticiones||ej.Repeticiones}</td>
+              <td>${ej.descanso||ej.Descanso||'—'}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  }
+
+  mc.innerHTML = html;
+}
+
+/* ══════════════════════════════════════════
+   VISTA EDICIÓN
+══════════════════════════════════════════ */
+function getCicloActual() {
+  const mapaCiclos = STATE.cliente.mapaCiclos || STATE.cliente.MapaCiclos || {};
+  return STATE.cicloKey ? mapaCiclos[STATE.cicloKey] : null;
+}
+
+function renderEdit() {
+  renderCycleTabs();
+  renderSemanas();
+  hideDiaEditor();
+}
+
+function renderCycleTabs() {
+  const tabs = document.getElementById('cycle-tabs');
+  const mapaCiclos = STATE.cliente.mapaCiclos || STATE.cliente.MapaCiclos || {};
+  tabs.innerHTML = '';
+
+  Object.entries(mapaCiclos).forEach(([key, ciclo]) => {
+    const sig = ciclo.siguiendo || ciclo.Siguiendo;
+    const tab = document.createElement('div');
+    tab.className = 'cycle-tab' + (STATE.cicloKey === key ? ' selected' : '');
+    tab.innerHTML = `<div class="dot" style="${sig ? '' : 'background:var(--muted)'}"></div>${key}`;
+    tab.addEventListener('click', () => {
+      STATE.cicloKey = key;
+      STATE.diaRef = null;
+      renderCycleTabs();
+      renderSemanas();
+      hideDiaEditor();
+    });
+    tabs.appendChild(tab);
+  });
+
+  if (!STATE.cicloKey && Object.keys(mapaCiclos).length > 0) {
+    STATE.cicloKey = Object.keys(mapaCiclos)[0];
+    renderCycleTabs();
+  }
+}
+
+function renderSemanas() {
+  const list = document.getElementById('semanas-list');
+  const ciclo = getCicloActual();
+  list.innerHTML = '';
+  if (!ciclo) return;
+
+  const semanas = ciclo.listaSemanas || ciclo.ListaSemanas || [];
+
+  semanas.forEach((sem, si) => {
+    const nombreSem = sem.nombreSemana || sem.NombreSemana || `Semana ${si+1}`;
+    const dias = sem.listaDias || sem.ListaDias || [];
+
+    const item = document.createElement('div');
+    item.className = 'semana-item';
+
+    const header = document.createElement('div');
+    header.className = 'semana-header';
+    header.innerHTML = `
+      <span class="s-name">${nombreSem}</span>
+      <input type="text" value="${nombreSem}" class="btn btn-ghost btn-sm" style="max-width:160px;padding:.3rem .6rem" placeholder="Nombre semana" data-si="${si}" />
+      <button class="btn btn-danger btn-icon" data-del-sem="${si}" title="Eliminar semana">✕</button>
+      <span class="chevron">›</span>`;
+    header.querySelector('input').addEventListener('click', e => e.stopPropagation());
+    header.querySelector('input').addEventListener('input', e => {
+      const ci = getCicloActual();
+      const sems = ci.listaSemanas || ci.ListaSemanas;
+      (sems[si].nombreSemana !== undefined)
+        ? (sems[si].nombreSemana = e.target.value)
+        : (sems[si].NombreSemana = e.target.value);
+    });
+    header.querySelector('[data-del-sem]').addEventListener('click', e => {
+      e.stopPropagation();
+      const ci = getCicloActual();
+      const arr = ci.listaSemanas || ci.ListaSemanas;
+      arr.splice(si, 1);
+      renderSemanas();
+    });
+    header.addEventListener('click', () => {
+      const open = body.classList.toggle('open');
+      header.classList.toggle('open', open);
+    });
+
+    const body = document.createElement('div');
+    body.className = 'semana-body';
+
+    const diasGrid = document.createElement('div');
+    diasGrid.className = 'dias-grid';
+
+    dias.forEach((dia, di) => {
+      const nombreDia = dia.nombreDia || dia.NombreDia || DIAS_SEMANA[di] || `Día ${di+1}`;
+      const activo    = dia.activo !== undefined ? dia.activo : (dia.Activo !== undefined ? dia.Activo : true);
+      const kcal      = dia.kcal || dia.Kcal || 0;
+      const selected  = STATE.diaRef && STATE.diaRef.si === si && STATE.diaRef.di === di;
+
+      const row = document.createElement('div');
+      row.className = 'dia-row' + (selected ? ' selected' : '');
+      row.innerHTML = `
+        <span class="dia-name">${nombreDia}</span>
+        <input type="number" class="kcal-input" value="${kcal}" placeholder="kcal" min="0" step="50" />
+        <span style="font-size:.78rem;color:var(--muted)">activo</span>
+        <input type="checkbox" ${activo ? 'checked' : ''} />`;
+
+      row.querySelector('input[type=number]').addEventListener('click', e => e.stopPropagation());
+      row.querySelector('input[type=number]').addEventListener('input', e => {
+        const ci = getCicloActual();
+        const d  = (ci.listaSemanas||ci.ListaSemanas)[si];
+        const ds = d.listaDias||d.ListaDias;
+        (ds[di].kcal !== undefined) ? (ds[di].kcal = +e.target.value) : (ds[di].Kcal = +e.target.value);
+      });
+      row.querySelector('input[type=checkbox]').addEventListener('click', e => e.stopPropagation());
+      row.querySelector('input[type=checkbox]').addEventListener('change', e => {
+        const ci = getCicloActual();
+        const d  = (ci.listaSemanas||ci.ListaSemanas)[si];
+        const ds = d.listaDias||d.ListaDias;
+        (ds[di].activo !== undefined) ? (ds[di].activo = e.target.checked) : (ds[di].Activo = e.target.checked);
+      });
+
+      row.addEventListener('click', () => {
+        STATE.diaRef = { si, di };
+        renderSemanas();
+        renderEjercicios(si, di, nombreDia, semanas);
+      });
+
+      diasGrid.appendChild(row);
+    });
+
+    body.appendChild(diasGrid);
+    item.appendChild(header);
+    item.appendChild(body);
+    list.appendChild(item);
+
+    // Abrir si tiene día seleccionado
+    if (STATE.diaRef && STATE.diaRef.si === si) {
+      body.classList.add('open');
+      header.classList.add('open');
+    }
+  });
+}
+
+function renderEjercicios(si, di, nombreDia, semanas) {
+  const card = document.getElementById('card-ejercicios');
+  const title = document.getElementById('ejercicios-title');
+  const tbody = document.getElementById('ejercicios-tbody');
+
+  card.classList.remove('hidden');
+  title.textContent = `Ejercicios — ${nombreDia}`;
+
+  const sem = semanas[si];
+  const diasList = sem.listaDias || sem.ListaDias;
+  const dia = diasList[di];
+  const ejercicios = dia.listaEjercicios || dia.ListaEjercicios || [];
+
+  const renderRows = () => {
+    tbody.innerHTML = '';
+    ejercicios.forEach((ej, ei) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" value="${ej.nombre||ej.Nombre||''}" placeholder="Ejercicio" /></td>
+        <td><input type="number" value="${ej.series||ej.Series||0}" min="0" style="width:60px" /></td>
+        <td><input type="number" value="${ej.repeticiones||ej.Repeticiones||0}" min="0" style="width:60px" /></td>
+        <td><input type="text" value="${ej.descanso||ej.Descanso||''}" placeholder="ej: 60s" /></td>
+        <td><button class="btn btn-danger btn-sm">✕</button></td>`;
+
+      const inputs = tr.querySelectorAll('input');
+      inputs[0].addEventListener('input', e => { ej.nombre = e.target.value; ej.Nombre = e.target.value; });
+      inputs[1].addEventListener('input', e => { ej.series = +e.target.value; ej.Series = +e.target.value; });
+      inputs[2].addEventListener('input', e => { ej.repeticiones = +e.target.value; ej.Repeticiones = +e.target.value; });
+      inputs[3].addEventListener('input', e => { ej.descanso = e.target.value; ej.Descanso = e.target.value; });
+
+      tr.querySelector('.btn-danger').addEventListener('click', () => {
+        ejercicios.splice(ei, 1);
+        renderRows();
+      });
+
+      tbody.appendChild(tr);
+    });
+  };
+
+  renderRows();
+
+  // Botón añadir ejercicio
+  document.getElementById('btn-add-ej').onclick = () => {
+    ejercicios.push({ nombre:'', Nombre:'', series:3, Series:3, repeticiones:10, Repeticiones:10, descanso:'60s', Descanso:'60s', descripcion:'', Descripcion:'', posicion: ejercicios.length });
+    renderRows();
+  };
+}
+
+function hideDiaEditor() {
+  document.getElementById('card-ejercicios').classList.add('hidden');
+}
+
+/* ══════════════════════════════════════════
+   EVENT LISTENERS
+══════════════════════════════════════════ */
+
+// ── Login ────────────────────────────────
+document.getElementById('btn-login').addEventListener('click', async () => {
+  const id  = document.getElementById('inp-id').value.trim();
+  const pwd = document.getElementById('inp-pwd').value;
+  if (!id || !pwd) { toast('Completa los campos', 'error'); return; }
+  try {
+    const res = await apiFetch(`/cliente/${encodeURIComponent(id)}?password=${encodeURIComponent(pwd)}`);
+    STATE.token   = res.token;
+    STATE.cliente = res.cliente;
+    STATE.cicloKey = null;
+    save();
+    showView('menu');
+    toast(`Bienvenido, ${id}!`, 'success');
+  } catch (e) { toast(e.message, 'error'); }
+});
+
+document.getElementById('inp-pwd').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btn-login').click();
+});
+
+// ── Registro rápido ──────────────────────
+document.getElementById('lnk-register').addEventListener('click', async e => {
+  e.preventDefault();
+  const id  = document.getElementById('inp-id').value.trim();
+  const pwd = document.getElementById('inp-pwd').value;
+  if (!id || !pwd) { toast('Rellena usuario y contraseña', 'error'); return; }
+  try {
+    await apiFetch('/cliente', { method: 'POST', body: JSON.stringify({ id_Cliente: id, password: pwd }) });
+    toast('Cuenta creada. Ahora pulsa Entrar.', 'success');
+  } catch (e) { toast(e.message, 'error'); }
+});
+
+// ── Logout ───────────────────────────────
+document.getElementById('btn-logout').addEventListener('click', () => {
+  sessionStorage.clear();
+  STATE = { cliente: null, token: null, cicloKey: null, diaRef: null };
+  showView('login');
+});
+
+// ── Navegación ───────────────────────────
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => showView(item.dataset.view));
+});
+
+// ── Nuevo ciclo ──────────────────────────
+document.getElementById('btn-new-ciclo').addEventListener('click', () => {
+  const nombre = prompt('Nombre del nuevo ciclo:');
+  if (!nombre?.trim()) return;
+  const mapaCiclos = STATE.cliente.mapaCiclos || STATE.cliente.MapaCiclos || {};
+  if (mapaCiclos[nombre]) { toast('Ya existe ese ciclo', 'error'); return; }
+  mapaCiclos[nombre] = {
+    nombre, Nombre: nombre,
+    siguiendo: false, Siguiendo: false,
+    fechaActivacion: null, FechaActivacion: null,
+    listaSemanas: [], ListaSemanas: []
+  };
+  STATE.cicloKey = nombre;
+  renderCycleTabs();
+  renderSemanas();
+  hideDiaEditor();
+});
+
+// ── Activar ciclo ─────────────────────────
+document.getElementById('btn-toggle-siguiendo').addEventListener('click', () => {
+  if (!STATE.cicloKey) { toast('Selecciona un ciclo', 'error'); return; }
+  const mapaCiclos = STATE.cliente.mapaCiclos || STATE.cliente.MapaCiclos || {};
+  const ciclo = mapaCiclos[STATE.cicloKey];
+  const estaActivo = ciclo.siguiendo || ciclo.Siguiendo;
+
+  Object.values(mapaCiclos).forEach(c => {
+    c.siguiendo = false; c.Siguiendo = false;
+  });
+
+  if (!estaActivo) {
+    ciclo.siguiendo = true; ciclo.Siguiendo = true;
+    ciclo.fechaActivacion = new Date().toISOString();
+    ciclo.FechaActivacion = ciclo.fechaActivacion;
+    toast(`Ciclo "${STATE.cicloKey}" activado ✅`, 'success');
+  } else {
+    toast(`Ciclo "${STATE.cicloKey}" desactivado`, 'info');
+  }
+  renderCycleTabs();
+});
+
+// ── Añadir semana ─────────────────────────
+document.getElementById('btn-add-semana').addEventListener('click', () => {
+  const ciclo = getCicloActual();
+  if (!ciclo) { toast('Selecciona un ciclo primero', 'error'); return; }
+  const sems = ciclo.listaSemanas || ciclo.ListaSemanas;
+  const idx = sems.length + 1;
+  const nuevaSemana = {
+    nombreSemana: `Semana ${idx}`, NombreSemana: `Semana ${idx}`,
+    posicion: idx,
+    listaDias: DIAS_SEMANA.map(d => ({
+      nombreDia: d, NombreDia: d,
+      kcal: 0, Kcal: 0,
+      activo: true, Activo: true,
+      listaEjercicios: [], ListaEjercicios: []
+    })),
+    ListaDias: undefined
+  };
+  // limpiamos el alias redundante
+  nuevaSemana.ListaDias = nuevaSemana.listaDias;
+  sems.push(nuevaSemana);
+  renderSemanas();
+});
+
+// ── Guardar ciclo ─────────────────────────
+document.getElementById('btn-save').addEventListener('click', async () => {
+  if (!STATE.cicloKey) { toast('Selecciona un ciclo', 'error'); return; }
+  const idCliente = STATE.cliente.idCliente || STATE.cliente.IdCliente || STATE.cliente.id_Cliente;
+  const ciclo = getCicloActual();
+
+  // Normalizar estructura para el backend
+  const payload = normalizeCiclo(ciclo);
+
+  try {
+    await apiFetch(`/ciclo?idCliente=${encodeURIComponent(idCliente)}`, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    save();
+    toast('Ciclo guardado correctamente 💾', 'success');
+  } catch (e) { toast(e.message, 'error'); }
+});
+
+/* Normaliza alias dobles (camelCase + PascalCase) al formato esperado por el backend */
+function normalizeCiclo(ciclo) {
+  return {
+    nombre:          ciclo.nombre || ciclo.Nombre,
+    siguiendo:       ciclo.siguiendo || ciclo.Siguiendo || false,
+    fechaActivacion: ciclo.fechaActivacion || ciclo.FechaActivacion || null,
+    listaSemanas: (ciclo.listaSemanas || ciclo.ListaSemanas || []).map((sem, si) => ({
+      nombreSemana: sem.nombreSemana || sem.NombreSemana || `Semana ${si+1}`,
+      posicion: si,
+      listaDias: (sem.listaDias || sem.ListaDias || []).map((dia, di) => ({
+        nombreDia: dia.nombreDia || dia.NombreDia || DIAS_SEMANA[di],
+        kcal:   dia.kcal  || dia.Kcal  || 0,
+        activo: dia.activo !== undefined ? dia.activo : (dia.Activo !== undefined ? dia.Activo : true),
+        listaEjercicios: (dia.listaEjercicios || dia.ListaEjercicios || []).map((ej, ei) => ({
+          nombre:       ej.nombre       || ej.Nombre       || '',
+          descripcion:  ej.descripcion  || ej.Descripcion  || '',
+          series:       ej.series       || ej.Series       || 0,
+          repeticiones: ej.repeticiones || ej.Repeticiones || 0,
+          descanso:     ej.descanso     || ej.Descanso     || '',
+          posicion: ei
+        }))
+      }))
+    }))
+  };
+}
+
+/* ══════════════════════════════════════════
+   INICIO
+══════════════════════════════════════════ */
+(function init() {
+  load();
+  if (STATE.cliente && STATE.token) {
+    showView('menu');
+    document.getElementById('lbl-cliente-sidebar').textContent =
+      STATE.cliente.idCliente || STATE.cliente.IdCliente || STATE.cliente.id_Cliente;
+  } else {
+    showView('login');
+  }
+})();
+</script>
+</body>
+</html>
