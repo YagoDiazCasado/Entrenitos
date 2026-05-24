@@ -1099,11 +1099,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\EntrenitosBackend.csproj",
+      "projectUniqueName": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\data\\EntrenitosBackend.csproj",
       "projectName": "EntrenitosBackend",
-      "projectPath": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\EntrenitosBackend.csproj",
+      "projectPath": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\data\\EntrenitosBackend.csproj",
       "packagesPath": "C:\\Users\\yagom\\.nuget\\packages\\",
-      "outputPath": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\obj\\",
+      "outputPath": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\yagom\\AppData\\Roaming\\NuGet\\NuGet.Config"

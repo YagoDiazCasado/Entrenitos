@@ -1,0 +1,28 @@
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=db;Database=Blog;Uid=root;Pwd=;
+    restart: on-failure  # 1. Reinicia si falla la conexión inicial
+    depends_on:
+      db:
+        condition: service_healthy # 2. Espera a que la BD esté LISTA, no solo encendida
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=Blog
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ./blog.sql:/docker-entrypoint-initdb.d/setup.sql
+      - db_data:/var/lib/mysql
+    healthcheck: # 3. Define qué significa que la BD esté "sana"
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "CMh4UQFN1Kk=",
+  "dgSpecHash": "/CTNRS1fan4=",
   "success": true,
-  "projectFilePath": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\EntrenitosBackend.csproj",
+  "projectFilePath": "D:\\ProyectosLocales\\Entrenitos\\EntrenitosBackend\\data\\EntrenitosBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\yagom\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\yagom\\.nuget\\packages\\bouncycastle.cryptography\\2.6.2\\bouncycastle.cryptography.2.6.2.nupkg.sha512",

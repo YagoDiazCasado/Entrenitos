@@ -438,3 +438,227 @@ label {
     border-bottom: 1px solid var(--md-surface-variant);
     padding-bottom: 1.25rem;
 }
+/* ==========================================================================
+   DRAG & DROP - SEMANAS
+   ========================================================================== */
+.semana-block {
+    transition: opacity 0.2s ease, transform 0.15s ease;
+    cursor: default;
+}
+
+.semana-block.dragging-semana {
+    opacity: 0.4;
+    transform: scale(0.98);
+}
+
+.semana-block.drag-over-semana {
+    outline: 2px dashed var(--md-primary);
+    outline-offset: 4px;
+    background: var(--md-primary-container);
+}
+
+.drag-handle-semana {
+    cursor: grab;
+    font-size: 1.2rem;
+    color: var(--md-outline);
+    padding: 0 0.5rem;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.drag-handle-semana:active {
+    cursor: grabbing;
+}
+
+.semana-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--md-surface-variant);
+    user-select: none;
+    gap: 0.5rem;
+}
+
+/* Input de nombre de semana inline */
+.semana-nombre-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--md-primary);
+    width: auto;
+    min-width: 180px;
+    max-width: 300px;
+    margin: 0;
+    cursor: text;
+    transition: border-bottom-color 0.2s;
+}
+
+.semana-nombre-input:focus {
+    background: transparent;
+    border-bottom-color: var(--md-primary);
+    outline: none;
+}
+
+.semana-nombre-input::placeholder {
+    color: var(--md-outline);
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.semana-expand-icon {
+    font-size: 0.8rem;
+    color: var(--md-text-muted);
+    margin-left: 0.5rem;
+}
+
+/* ==========================================================================
+   DRAG & DROP - EJERCICIOS
+   ========================================================================== */
+.ejercicio-drag-row {
+    transition: background 0.15s ease;
+}
+
+.ejercicio-drag-row.dragging-ej {
+    opacity: 0.3;
+}
+
+.ejercicio-drag-row.drag-over-ej {
+    background: var(--md-primary-container);
+    outline: 1px solid var(--md-primary);
+}
+
+/* ==========================================================================
+   VISTA COMPLETA DE SEMANA (MENÚ)
+   ========================================================================== */
+.vista-semana-wrapper {
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.vista-semana-header {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--md-surface-variant);
+}
+
+.tabla-semana-scroll {
+    overflow-x: auto;
+    border-radius: var(--radius-medium);
+    box-shadow: var(--md-shadow);
+}
+
+.tabla-semana-completa {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    background: #fff;
+    min-width: 600px;
+}
+
+.tabla-semana-completa th,
+.tabla-semana-completa td {
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--md-surface-variant);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.th-fila-num {
+    background: var(--md-surface-variant);
+    color: var(--md-text-muted);
+    font-size: 0.75rem;
+    width: 2.5rem;
+    font-weight: 500;
+}
+
+.th-dia {
+    background: var(--md-surface-variant);
+    font-weight: 500;
+    color: var(--md-text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    min-width: 110px;
+    position: relative;
+}
+
+.th-dia.dia-hoy {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    font-weight: 700;
+}
+
+.badge-hoy {
+    display: block;
+    font-size: 0.65rem;
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.5px;
+}
+
+.kcal-badge {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--md-outline);
+    font-weight: 400;
+    margin-top: 0.2rem;
+}
+
+.celda-hoy {
+    background: #f0f4ff;
+}
+
+.celda-descanso {
+    background: var(--md-success-container);
+    color: var(--md-on-success-container);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.celda-vacia {
+    color: var(--md-surface-variant);
+}
+
+.td-num {
+    color: var(--md-text-muted);
+    font-size: 0.75rem;
+    background: var(--md-surface);
+}
+
+.ej-nombre {
+    font-weight: 500;
+    color: var(--md-text);
+    margin-bottom: 0.2rem;
+}
+
+.ej-detalle {
+    font-size: 0.75rem;
+    color: var(--md-text-muted);
+}
+
+/* Botón de vista activa */
+.btn-primary-active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    width: auto;
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: var(--radius-large);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
