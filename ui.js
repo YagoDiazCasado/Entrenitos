@@ -297,6 +297,7 @@ class UIController {
         // Guardar qué semanas estaban abiertas
         const expandedWeeks = new Set();
         document.querySelectorAll('.dias-container.expanded').forEach(el => expandedWeeks.add(el.id));
+        store.cicloEditando.listaSemanas.sort((a, b) => (a.posicion || 0) - (b.posicion || 0)); 
 
         container.innerHTML = '';
 

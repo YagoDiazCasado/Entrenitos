@@ -18,6 +18,28 @@ namespace EntrenitosBackEnd
         }
 
         [HttpPost("PostCliente")]
+
+        
+
+[Authorize]
+        [HttpDelete("DeleteCiclo/{id_Ciclo}")]
+        public IActionResult DeleteCiclo(int id_Ciclo)
+        {
+            try
+            {
+                var ciclo = _context.Ciclos.FirstOrDefault(c => c.Id_Ciclo == id_Ciclo);
+                if (ciclo == null) return NotFound("Ciclo no encontrado.");
+
+                _context.Ciclos.Remove(ciclo);
+                _context.SaveChanges();
+                return Ok(new { Mensaje = "Ciclo eliminado con éxito." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
+
 public IActionResult PostCliente([FromBody] LoginRequest req) // Recibe el objeto
 {
     try

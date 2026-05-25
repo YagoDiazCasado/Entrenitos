@@ -11,81 +11,63 @@ class Animaciones {
     // =====================================================================
     // 1. FEEDBACK DE CLIC (HAPTIC VISUAL)
     // =====================================================================
-    static initClickFeedback() {
+   static initClickFeedback() {
         const selector = 'button, .clickable, .semana-header, .dia-card';
 
+        // Animación suave de "hundimiento" mejorada
         document.body.addEventListener('mousedown', (e) => {
             const target = e.target.closest(selector);
-            if (target) target.classList.add('click-active');
+            if (target) {
+                target.style.transform = 'scale(0.97)';
+                target.style.transition = 'transform 0.1s cubic-bezier(0.4, 0, 0.2, 1)'; // Más lento y suave
+            }
         });
 
         ['mouseup', 'mouseleave', 'touchend'].forEach(evt => {
             document.body.addEventListener(evt, (e) => {
                 const target = e.target.closest(selector);
-                if (target) target.classList.remove('click-active');
+                if (target) {
+                    target.style.transform = 'scale(1)';
+                }
             });
         });
-
-        // Touch ripple visual en botones
-        document.body.addEventListener('click', (e) => {
-            const btn = e.target.closest('button');
-            if (!btn) return;
-
-            const ripple = document.createElement('span');
-            const rect = btn.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height) * 1.5;
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top  - size / 2;
-
-            Object.assign(ripple.style, {
-                position:     'absolute',
-                width:        size + 'px',
-                height:       size + 'px',
-                left:         x + 'px',
-                top:          y + 'px',
-                borderRadius: '50%',
-                background:   'rgba(255,255,255,0.18)',
-                transform:    'scale(0)',
-                animation:    'rippleAnim 0.5s ease-out forwards',
-                pointerEvents:'none',
-            });
-
-            btn.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 550);
-        });
-
-        // Inyectar keyframes de ripple si aún no existen
-        if (!document.getElementById('ripple-style')) {
-            const s = document.createElement('style');
-            s.id = 'ripple-style';
-            s.textContent = `@keyframes rippleAnim {
-                to { transform: scale(1); opacity: 0; }
-            }`;
-            document.head.appendChild(s);
-        }
     }
 
-    // =====================================================================
-    // 2. ANIMACIONES DE DESPLIEGUE (collapse/expand)
-    // =====================================================================
-
-    /**
-     * Abre/cierra un .dias-container usando grid-template-rows.
-     * La clase CSS hace la transición, nosotros sólo conmutamos 'expanded'.
-     */
     static toggleCollapse(elementId) {
         const el = document.getElementById(elementId);
         if (!el) return;
 
-        const isExpanded = el.classList.contains('expanded');
-        const icon = el.closest('.semana-block')?.querySelector('.semana-expand-icon');
+        // Limpiamos los temporizadores si haces clic súper rápido
+        clearTimeout(el.animTimeout);
 
-        if (isExpanded) {
-            el.classList.remove('expanded');
-            if (icon) icon.style.transform = 'rotate(0deg)';
+        if (el.classList.contains('open')) {
+            // CERRAR
+            // 1. Fijamos la altura estática exacta en píxeles
+            el.style.maxHeight = el.scrollHeight + 'px'; 
+            
+            // 2. Forzamos al navegador a procesar esa altura antes de cambiarla a 0 (vital para que funcione la transición)
+            void el.offsetHeight; 
+            
+            // 3. Colapsamos a cero
+            el.style.maxHeight = '0px';
+            el.style.opacity = '0';
+            el.style.margin = '0';
+            el.classList.remove('open');
         } else {
-            el.classList.add('expanded');
-            if (icon) icon.style.transform = 'rotate(180deg)';
+            // ABRIR
+            el.classList.add('open');
+            el.style.opacity = '1';
+            el.style.marginTop = '1rem';
+            
+            // 1. Calculamos lo que ocupa todo el contenido interior
+            el.style.maxHeight = el.scrollHeight + 'px';
+            
+            // 2. Al acabar la animación (400ms), quitamos el candado de altura por si el usuario añade nuevos ejercicios para que siga creciendo
+            el.animTimeout = setTimeout(() => {
+                if (el.classList.contains('open')) {
+                    el.style.maxHeight = 'none';
+                }
+            }, 400); 
         }
     }
 

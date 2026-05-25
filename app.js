@@ -70,6 +70,10 @@ class ApiService {
     static async deleteSemana(idSemana) {
         return this.fetchWithAuth(`/DeleteSemana/${idSemana}`, 'DELETE');
     }
+
+    static async deleteCiclo(id) {
+        return this.fetchWithAuth(`/DeleteCiclo/${id}`, 'DELETE');
+    }
 }
 
 // Inicialización

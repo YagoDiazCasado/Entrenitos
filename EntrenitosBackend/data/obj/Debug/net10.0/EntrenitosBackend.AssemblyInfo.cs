@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EntrenitosBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce69652cb579b133bbef8a228c349606ea6c665b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+358603ed41779ba5ad0d2d62387078bce66a1ed1")]
 [assembly: System.Reflection.AssemblyProductAttribute("EntrenitosBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EntrenitosBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -120,6 +120,84 @@ class Manejadores {
         UIController.renderSemanas();
     }
 
+    // --- RESETEAR FECHA DE INICIO DEL CICLO CON PERSISTENCIA INMEDIATA ---
+    static async handleResetearCiclo() {
+        const store = AppStore.getInstance();
+        
+        if (!store.cicloEditando) {
+            alert("No hay ningún ciclo seleccionado.");
+            return;
+        }
+
+        const idCiclo = document.getElementById('select-ciclo').value;
+        if (!idCiclo || idCiclo === "0") {
+            alert("Por favor, guarda primero el ciclo antes de resetear su fecha.");
+            return;
+        }
+
+        // 1. Modificamos la fecha en la memoria local (Javascript)
+        store.cicloEditando.fechaActivacion = new Date().toISOString();
+
+        // Obtener el contenedor de estado visual (depende de si se llama save-status o edit-status)
+        const stat = document.getElementById('save-status') || document.getElementById('edit-status');
+
+        // 2. Persistencia Inmediata: Lanzamos la petición directa al Backend en C#
+        try {
+            if (stat) {
+                stat.style.color = "var(--md-primary)";
+                stat.textContent = "Actualizando fecha de inicio...";
+            }
+
+            // Enviamos el objeto actualizado directamente a tu API
+            await ApiService.saveCiclo(store.cliente.id_Cliente, store.cicloEditando);
+            
+            // Refrescamos el perfil del cliente en la sesión para sincronizar todo
+            const perfil = await ApiService.getPerfil(store.cliente.id_Cliente);
+            store.setSesion(store.token, perfil);
+            
+            if (stat) {
+                stat.style.color = "green";
+                stat.textContent = "⏱️ Fecha de inicio actualizada en la BD.";
+                setTimeout(() => stat.textContent = "", 3000);
+            }
+
+            // Recargamos el componente de edición para asegurar la sincronía visual
+            UIController.loadCicloToEdit();
+
+        } catch (error) {
+            console.error("Error al persistir la fecha:", error);
+            alert("No se pudo guardar la nueva fecha en el servidor: " + error.message);
+        }
+    }
+    static async handleDeleteCiclo() {
+        const store = AppStore.getInstance();
+        const id = document.getElementById('select-ciclo').value;
+        
+        if (!id || id === "0") {
+            alert("Selecciona un ciclo ya guardado para eliminarlo.");
+            return;
+        }
+        
+        if (!confirm("⚠️ ¿Seguro que quieres eliminar este ciclo entero? Esta acción borrará todas sus semanas y ejercicios de forma irreversible.")) return;
+
+        try {
+            await ApiService.deleteCiclo(id);
+            
+            // Recargamos el perfil fresco desde la base de datos
+            const perfil = await ApiService.getPerfil(store.cliente.id_Cliente);
+            store.setSesion(store.token, perfil);
+            
+            alert("Ciclo eliminado correctamente.");
+            
+            // Volvemos a la pantalla de crear nuevo ciclo
+            document.getElementById('select-ciclo').value = "0";
+            UIController.loadCicloToEdit();
+            UIController.renderEdit();
+        } catch (err) {
+            alert("Error al eliminar ciclo: " + err.message);
+        }
+    }
+
     static async handleDeleteSemana(sIdx) {
         if (!confirm('¿Estás seguro de que quieres borrar esta semana? Esta acción es irreversible.')) return;
 
@@ -197,33 +275,35 @@ class Manejadores {
     }
 
     // --- CLONAR CICLO ENTERO ---
-    static handleCloneCiclo() {
+   static handleCloneCiclo() {
         const store = AppStore.getInstance();
         if (!store.cicloEditando) return;
 
         const clone = JSON.parse(JSON.stringify(store.cicloEditando));
         
-        clone.Id_Ciclo = 0;
+        // 🔥 Limpieza profunda de IDs (cubriendo mayúsculas y minúsculas)
+        clone.Id_Ciclo = 0; clone.id_Ciclo = 0; 
         clone.nombre = clone.nombre + " (Clon)";
         clone.siguiendo = false;
         clone.fechaActivacion = null;
         
-        clone.listaSemanas.forEach(s => {
-            s.id_Semana = 0; s.fk_ciclo = 0;
-            s.listaDias.forEach(d => {
-                d.id_Dia = 0; d.fk_semana = 0;
-                d.listaEjercicios.forEach(e => { e.id_Ejercicio = 0; e.fk_dia = 0; });
+        clone.listaSemanas.forEach((s, i) => {
+            s.Id_Semana = 0; s.id_Semana = 0; s.fk_ciclo = 0; s.posicion = i;
+            if (s.listaDias) s.listaDias.forEach(d => {
+                d.Id_Dia = 0; d.id_Dia = 0; d.fk_semana = 0;
+                if (d.listaEjercicios) d.listaEjercicios.forEach(e => { 
+                    e.Id_Ejercicio = 0; e.id_Ejercicio = 0; e.fk_dia = 0; 
+                });
             });
         });
 
         store.cicloEditando = clone;
         
-        // Engañamos a la UI para que seleccione "Crear Nuevo" y pinte el clon
         document.getElementById('select-ciclo').value = "0"; 
         document.getElementById('input-nuevo-ciclo').value = clone.nombre;
         
         UIController.renderEdit();
-        alert("¡Ciclo clonado en pantalla! Dale a 'Guardar Cambios' para consolidarlo en tu cuenta.");
+        alert("¡Ciclo clonado en pantalla! Dale a 'Guardar Cambios' para consolidarlo en la base de datos.");
     }
     // --- LOGICA DE REGISTRAR ---
     static async handleRegister(e) {
