@@ -1,281 +1,334 @@
 /* ==========================================================================
-   VARIABLES Y ESTILOS BASE (MATERIAL YOU / MD3)
+   ENTRENITOS — SPORT/ENERGY AESTHETIC
+   Fuentes: Barlow Condensed (display) + DM Sans (body)
    ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+/* --------------------------------------------------------------------------
+   TEMA BASE — se sobreescribe por JS (Animaciones.applyTheme)
+   -------------------------------------------------------------------------- */
 :root {
-    /* Paleta Tonal Orgánica (Dynamic Tones - Estilo Arándano/Lavanda) */
-    --md-bg: #f8f9ff;
-    --md-surface: #f1f3fa;
-    --md-surface-variant: #e1e2ec;
+    /* — Paleta principal — */
+    --md-bg:                  #0d0f14;
+    --md-surface:             #161a23;
+    --md-surface-variant:     #1e2330;
+    --md-primary:             #e8ff47;        /* Amarillo neón */
+    --md-on-primary:          #0d0f14;
+    --md-primary-container:   #2a2e1a;
+    --md-on-primary-container:#e8ff47;
 
-    --md-primary: #3f5f90;
-    --md-on-primary: #ffffff;
-    --md-primary-container: #d6e3ff;
-    --md-on-primary-container: #001b3e;
+    --md-secondary-container: #1e2330;
+    --md-on-secondary-container: #c5cfe8;
 
-    --md-secondary-container: #e8def8;
-    --md-on-secondary-container: #1d192b;
+    --md-text:                #eef0f6;
+    --md-text-muted:          #6b748a;
+    --md-outline:             #2e3347;
 
-    --md-text: #191c20;
-    --md-text-muted: #43474e;
-    --md-outline: #74777f;
+    --md-success-container:   #1a3329;
+    --md-on-success-container:#52e8a0;
+    --md-danger:              #ff4d5e;
+    --md-danger-container:    #2e1519;
+    --md-on-danger-container: #ff8a93;
 
-    /* Estados Semánticos MD3 */
-    --md-success-container: #c4eed2;
-    --md-on-success-container: #062e15;
-    --md-danger: #ba1a1a;
-    --md-danger-container: #ffdad6;
-    --md-on-danger-container: #410002;
+    /* — Radios — */
+    --radius-small:   6px;
+    --radius-medium:  14px;
+    --radius-large:   22px;
+    --radius-pill:    999px;
 
-    /* Radios y Sombras MD3 */
-    --radius-small: 8px;
-    --radius-medium: 16px;
-    --radius-large: 28px;
-    --md-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+    /* — Sombras — */
+    --md-shadow:      0 4px 24px rgba(0,0,0,.45);
+    --glow-primary:   0 0 18px rgba(232,255,71,.25);
+
+    /* — Transiciones — */
+    --t-fast:  0.15s cubic-bezier(.4,0,.2,1);
+    --t-med:   0.28s cubic-bezier(.4,0,.2,1);
+    --t-slow:  0.45s cubic-bezier(.4,0,.2,1);
+    --t-spring: 0.4s cubic-bezier(.34,1.56,.64,1);
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
-}
+/* ==========================================================================
+   RESET Y BASE
+   ========================================================================== */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--md-bg);
     color: var(--md-text);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 15px;
+    letter-spacing: .01em;
+    line-height: 1.5;
     padding: 1.5rem;
-    letter-spacing: 0.1px;
-    line-height: 1.4;
+    /* Ruido sutil de fondo */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 /* ==========================================================================
-   ESTRUCTURAS DE NAVEGACIÓN Y VISTAS
+   VISTAS
    ========================================================================== */
 .view-section {
     display: none;
     max-width: 800px;
     margin: 0 auto;
-    background: #ffffff;
+    background: var(--md-surface);
     padding: 2.5rem;
     border-radius: var(--radius-large);
     box-shadow: var(--md-shadow);
 }
+.view-section.active-view { display: block; }
 
+/* Animación de entrada de vista */
+@keyframes viewEnter {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)  scale(1); }
+}
 .view-section.active-view {
-    display: block;
+    animation: viewEnter var(--t-med) forwards;
 }
 
+/* ==========================================================================
+   TIPOGRAFÍA
+   ========================================================================== */
 h1 {
-    font-size: 1.75rem;
-    font-weight: 400;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -.01em;
     color: var(--md-text);
     margin-bottom: 1.5rem;
+    text-transform: uppercase;
 }
-
-h2,
-h3,
-h4 {
-    font-size: 1.25rem;
-    font-weight: 500;
+h2,h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    text-transform: uppercase;
     color: var(--md-text);
-    margin-bottom: 1rem;
+    margin-bottom: .8rem;
+}
+h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--md-text);
+    margin-bottom: .8rem;
 }
 
-/* Controles de Formulario (Filled Input Style corregido para Password) */
+/* ==========================================================================
+   INPUTS Y FORMULARIOS
+   ========================================================================== */
 input[type="text"],
 input[type="password"],
 input[type="number"],
 select {
     width: 100%;
-    padding: 1rem 1.2rem;
-    margin-bottom: 1.25rem;
+    padding: .85rem 1rem;
+    margin-bottom: 1rem;
     background-color: var(--md-surface-variant);
     color: var(--md-text);
-    border: none;
-    border-bottom: 2px solid transparent;
-    border-radius: var(--radius-small) var(--radius-small) 0 0;
-    font-size: 1rem;
-    transition: all 0.2s ease;
+    border: 1.5px solid var(--md-outline);
+    border-radius: var(--radius-small);
+    font-size: .95rem;
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+    outline: none;
 }
-
 input:focus,
 select:focus {
-    outline: none;
-    background-color: #e9eaf2;
-    border-bottom-color: var(--md-primary);
+    border-color: var(--md-primary);
+    background-color: var(--md-surface);
+    box-shadow: 0 0 0 3px rgba(232,255,71,.12);
 }
+select option { background: var(--md-surface); }
 
-/* Botones Estándar */
+/* ==========================================================================
+   BOTONES — base
+   ========================================================================== */
 button {
     width: 100%;
-    padding: 0.85rem 1.5rem;
-    margin-bottom: 1.25rem;
+    padding: .8rem 1.5rem;
+    margin-bottom: 1rem;
     background-color: var(--md-primary);
     color: var(--md-on-primary);
-    font-weight: 500;
-    font-size: 0.95rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
     border: none;
-    border-radius: var(--radius-large);
+    border-radius: var(--radius-medium);
     cursor: pointer;
-    transition: box-shadow 0.2s ease, opacity 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform var(--t-fast),
+        box-shadow var(--t-fast),
+        opacity var(--t-fast),
+        background var(--t-fast);
 }
 
+/* Ripple del pseudoelemento */
+button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.12);
+    opacity: 0;
+    border-radius: inherit;
+    transition: opacity var(--t-fast);
+}
+button:hover::after  { opacity: 1; }
 button:hover {
-    opacity: 0.92;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,.4), var(--glow-primary);
+}
+button:active, button.click-active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: none;
+    opacity: .88;
 }
 
+/* Variantes */
 .btn-secondary {
-    background-color: var(--md-primary-container);
-    color: var(--md-on-primary-container);
+    background-color: var(--md-surface-variant);
+    color: var(--md-text);
+    border: 1.5px solid var(--md-outline);
 }
-
 .btn-secondary:hover {
-    background-color: #c4d4f8;
+    border-color: var(--md-primary);
+    color: var(--md-primary);
+    box-shadow: 0 4px 16px rgba(0,0,0,.3);
 }
-
 .btn-danger {
     background-color: var(--md-danger-container);
     color: var(--md-on-danger-container);
+    border: 1.5px solid transparent;
 }
-
 .btn-danger:hover {
-    background-color: #ffccc7;
+    background-color: var(--md-danger);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(255,77,94,.3);
 }
 
-/* ==========================================================================
-   DISEÑO FLEXIBLE Y EVITACIÓN DE CHOQUES visuales
-   ========================================================================== */
-.flex-row {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-    /* Previene el desbordamiento en pantallas móviles */
-}
-
-/* Anula márgenes inferiores dentro de flujos en línea */
-.flex-row input,
-.flex-row button,
-.flex-row select {
-    margin-bottom: 0;
-}
-
-/* Gestión de anchos fijos o proporcionales sin colisiones */
-.w-70 {
-    flex: 1 1 60%;
-    min-width: 200px;
-}
-
-.w-25 {
-    flex: 0 0 auto;
-    width: auto;
-}
-
-/* Botones en línea específicos (Acciones secundarias) */
 .btn-inline {
     width: auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.5rem 1.25rem;
-    font-size: 0.85rem;
+    padding: .45rem 1rem;
+    font-size: .85rem;
     margin-bottom: 0;
 }
 
-/* Elementos de Selección y Checkbox */
+/* ==========================================================================
+   FEEDBACK DE CLIC
+   ========================================================================== */
+.clickable, .semana-header, .dia-card {
+    transition: transform var(--t-fast);
+}
+.semana-header:hover { background: rgba(255,255,255,.025); border-radius: var(--radius-small); }
+.semana-header.click-active, .dia-card.click-active { transform: scale(0.99); }
+
+/* ==========================================================================
+   FLEX UTILS
+   ========================================================================== */
+.flex-row {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+.flex-row input, .flex-row button, .flex-row select { margin-bottom: 0; }
+.w-70 { flex: 1 1 60%; min-width: 200px; }
+.w-25 { flex: 0 0 auto; width: auto; }
+
+/* Checkbox */
 input[type="checkbox"] {
     accent-color: var(--md-primary);
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1.1rem;
+    height: 1.1rem;
     cursor: pointer;
     flex-shrink: 0;
 }
-
 label {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.95rem;
+    gap: .5rem;
+    font-size: .9rem;
     color: var(--md-text-muted);
     cursor: pointer;
     user-select: none;
+    transition: color var(--t-fast);
 }
+label:hover { color: var(--md-text); }
 
 /* ==========================================================================
-   PANELES DINÁMICOS E INFO (MENÚ PRINCIPAL)
+   INFO BOXES
    ========================================================================== */
 .info-box {
-    padding: 1.25rem;
+    padding: 1.1rem 1.25rem;
     border-radius: var(--radius-medium);
     margin-bottom: 1.5rem;
     background-color: var(--md-surface-variant);
     color: var(--md-text);
+    border-left: 3px solid var(--md-outline);
 }
-
 .info-box.success {
     background-color: var(--md-success-container);
     color: var(--md-on-success-container);
+    border-color: var(--md-on-success-container);
 }
-
 .info-box.danger {
     background-color: var(--md-danger-container);
     color: var(--md-on-danger-container);
+    border-color: var(--md-danger);
 }
-
-.info-box p {
-    font-weight: 500;
-}
-
-.info-box .sub-text {
-    font-size: 0.85rem;
-    opacity: 0.85;
-    margin-top: 0.4rem;
-}
+.info-box p { font-weight: 500; }
+.info-box .sub-text { font-size: .85rem; opacity: .8; margin-top: .3rem; }
 
 /* ==========================================================================
-   TABLAS DE EJERCICIOS (MATERIAL SURFACE TABLE)
+   TABLAS
    ========================================================================== */
 .excel-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.25rem 0;
-    font-size: 0.9rem;
-    background-color: #ffffff;
+    margin: 1rem 0;
+    font-size: .88rem;
+    background-color: var(--md-surface);
     border-radius: var(--radius-medium);
     overflow: hidden;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
 }
-
 .excel-table th,
 .excel-table td {
-    padding: 0.85rem 1rem;
-    border: none;
-    border-bottom: 1px solid var(--md-surface-variant);
+    padding: .75rem .9rem;
+    border-bottom: 1px solid var(--md-outline);
     text-align: left;
 }
-
 .excel-table th {
     background-color: var(--md-surface-variant);
-    font-weight: 500;
-    color: var(--md-text-muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: .8rem;
+    letter-spacing: .06em;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.5px;
+    color: var(--md-text-muted);
 }
-
+.excel-table tr:last-child td { border-bottom: none; }
+.excel-table tbody tr {
+    transition: background var(--t-fast);
+}
+.excel-table tbody tr:hover { background: var(--md-surface-variant); }
 .excel-table td input {
-    width: 100%;
-    margin: 0;
-    padding: 0.4rem;
-    border: none;
-    border-radius: 4px;
+    width: 100%; margin: 0; padding: .35rem .5rem;
+    border: none; border-radius: 4px;
     background: transparent;
-    font-size: 0.95rem;
-    transition: background 0.2s;
+    font-size: .9rem;
+    transition: background var(--t-fast);
+    color: var(--md-text);
 }
-
 .excel-table td input:focus {
     background: var(--md-primary-container);
     color: var(--md-on-primary-container);
@@ -283,382 +336,472 @@ label {
 }
 
 /* ==========================================================================
-   CONTENEDORES DE GESTIÓN (SEMANAS, DÍAS Y EJERCICIOS)
+   BLOQUES DE SEMANA
    ========================================================================== */
 .semana-block {
     background: var(--md-surface);
-    padding: 1.5rem;
-    margin-bottom: 1.75rem;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
     border-radius: var(--radius-large);
-    border: none;
+    border: 1.5px solid var(--md-outline);
+    transition:
+        border-color var(--t-fast),
+        box-shadow var(--t-fast),
+        transform var(--t-fast),
+        opacity var(--t-fast);
+}
+.semana-block:hover {
+    border-color: var(--md-primary);
+    box-shadow: 0 0 0 1px var(--md-primary), var(--glow-primary);
+}
+.semana-block.dragging-semana {
+    opacity: .35;
+    transform: scale(.97) rotate(-1deg);
+}
+.semana-block.drag-over-semana {
+    border-color: var(--md-primary);
+    background: var(--md-primary-container);
+    box-shadow: var(--glow-primary);
 }
 
+/* Header de semana */
 .semana-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--md-surface-variant);
+    padding-bottom: .75rem;
+    margin-bottom: .75rem;
+    border-bottom: 1px solid var(--md-outline);
     cursor: pointer;
     user-select: none;
-}
-
-.semana-header h3 {
-    margin: 0;
-    color: var(--md-primary);
-    font-weight: 500;
-}
-
-.semana-actions {
-    display: flex;
-    gap: 0.5rem;
-    flex-shrink: 0;
-}
-
-/* Desplegables animados */
-.dias-container {
-    display: none;
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-top: 1rem;
-}
-
-.dias-container.expanded {
-    display: flex;
-}
-
-/* Tarjeta de Día */
-.dia-card,
-.dia-block {
-    background: #ffffff;
-    padding: 1.5rem;
-    border-radius: var(--radius-medium);
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--md-surface-variant);
-}
-
-/* Botón interno de la tarjeta de día corregido */
-.dia-card button {
-    width: auto;
-    margin-top: 0.75rem;
-    margin-bottom: 0;
-    display: inline-block;
-}
-
-.dia-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
-
-.dia-header h4 {
-    margin: 0;
-    font-weight: 500;
-    flex-grow: 1;
-    min-width: 120px;
-}
-
-/* Ajuste sutil del input calórico */
-.input-kcal {
-    width: 110px !important;
-    margin: 0 !important;
-    padding: 0.5rem !important;
-    font-size: 0.9rem;
-    border-radius: var(--radius-small);
-}
-
-/* Contenedor de hileras de ejercicios */
-.ejercicios-container {
-    margin-top: 1rem;
-    padding-left: 0.75rem;
-    border-left: 3px solid var(--md-primary-container);
-}
-
-.ejercicio-row {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    align-items: center;
-}
-
-.ejercicio-row input {
-    margin: 0;
-    padding: 0.6rem;
-    font-size: 0.9rem;
-    background-color: var(--md-bg);
-    border-radius: var(--radius-small);
-    margin-bottom: 0;
-}
-
-.ejercicio-row input:focus {
-    background-color: var(--md-primary-container);
-}
-
-.input-ej-nombre {
-    flex: 2;
-    min-width: 140px;
-}
-
-.input-ej-series {
-    flex: 0.5;
-    min-width: 50px;
-}
-
-.input-ej-reps {
-    flex: 0.5;
-    min-width: 50px;
-}
-
-.input-ej-desc {
-    flex: 1;
-    min-width: 80px;
-}
-
-/* Botón eliminar (X) en hileras de ejercicios */
-.ejercicio-row button.btn-danger {
-    width: auto;
-    margin: 0;
-    padding: 0.6rem 1rem;
-    border-radius: var(--radius-small);
-}
-
-/* Etiquetas de Estado e Interfaces Limpias */
-.status-label {
-    font-weight: 500;
-    font-size: 0.9rem;
-    margin-top: 0.75rem;
-    display: block;
-}
-
-.border-divider {
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--md-surface-variant);
-    padding-bottom: 1.25rem;
-}
-/* ==========================================================================
-   DRAG & DROP - SEMANAS
-   ========================================================================== */
-.semana-block {
-    transition: opacity 0.2s ease, transform 0.15s ease;
-    cursor: default;
-}
-
-.semana-block.dragging-semana {
-    opacity: 0.4;
-    transform: scale(0.98);
-}
-
-.semana-block.drag-over-semana {
-    outline: 2px dashed var(--md-primary);
-    outline-offset: 4px;
-    background: var(--md-primary-container);
+    gap: .5rem;
+    border-radius: var(--radius-small) var(--radius-small) 0 0;
+    padding: .4rem .4rem .75rem;
+    margin: -.2rem -.2rem .75rem;
 }
 
 .drag-handle-semana {
     cursor: grab;
-    font-size: 1.2rem;
-    color: var(--md-outline);
-    padding: 0 0.5rem;
+    font-size: 1.1rem;
+    color: var(--md-text-muted);
+    padding: .25rem .5rem;
     user-select: none;
     flex-shrink: 0;
+    transition: color var(--t-fast);
 }
+.drag-handle-semana:hover { color: var(--md-primary); }
+.drag-handle-semana:active { cursor: grabbing; }
 
-.drag-handle-semana:active {
-    cursor: grabbing;
-}
-
-.semana-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--md-surface-variant);
-    user-select: none;
-    gap: 0.5rem;
-}
-
-/* Input de nombre de semana inline */
 .semana-nombre-input {
     background: transparent;
     border: none;
     border-bottom: 2px solid transparent;
     border-radius: 0;
-    padding: 0.25rem 0.5rem;
-    font-size: 1rem;
-    font-weight: 500;
+    padding: .2rem .4rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
     color: var(--md-primary);
     width: auto;
     min-width: 180px;
     max-width: 300px;
     margin: 0;
     cursor: text;
-    transition: border-bottom-color 0.2s;
+    transition: border-bottom-color var(--t-fast), background var(--t-fast);
 }
-
 .semana-nombre-input:focus {
-    background: transparent;
+    background: rgba(232,255,71,.06);
     border-bottom-color: var(--md-primary);
     outline: none;
 }
+.semana-nombre-input::placeholder { color: var(--md-text-muted); font-weight: 400; }
 
-.semana-nombre-input::placeholder {
-    color: var(--md-outline);
-    font-weight: 400;
-    font-size: 0.9rem;
+.semana-actions {
+    display: flex;
+    gap: .4rem;
+    flex-shrink: 0;
 }
-
 .semana-expand-icon {
-    font-size: 0.8rem;
+    font-size: .7rem;
     color: var(--md-text-muted);
-    margin-left: 0.5rem;
+    margin-left: .4rem;
+    transition: transform var(--t-med);
+    display: inline-block;
 }
 
 /* ==========================================================================
-   DRAG & DROP - EJERCICIOS
+   DÍAS — contenedor y tarjeta
    ========================================================================== */
-.ejercicio-drag-row {
-    transition: background 0.15s ease;
+
+/* Animación de despliegue */
+.dias-container {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows var(--t-med);
+    gap: 1rem;
+    /* fix grid + flex hijos */
+}
+.dias-container > * { min-height: 0; }
+.dias-container.expanded {
+    grid-template-rows: 1fr;
 }
 
-.ejercicio-drag-row.dragging-ej {
-    opacity: 0.3;
+/* Wrapeamos el contenido real para que el grid funcione */
+.dias-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
 }
 
+.dia-card, .dia-block {
+    background: var(--md-surface-variant);
+    padding: 1.25rem;
+    border-radius: var(--radius-medium);
+    border: 1px solid var(--md-outline);
+    transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.dia-card:hover {
+    border-color: rgba(232,255,71,.2);
+}
+.dia-card button {
+    width: auto;
+    margin-top: .6rem;
+    margin-bottom: 0;
+    display: inline-block;
+}
+.dia-header {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .8rem;
+    flex-wrap: wrap;
+}
+.dia-header h4 { margin: 0; flex-grow: 1; min-width: 100px; }
+
+.input-kcal {
+    width: 100px !important;
+    margin: 0 !important;
+    padding: .4rem .6rem !important;
+    font-size: .88rem;
+    border-radius: var(--radius-small);
+}
+
+/* ==========================================================================
+   FILAS DE EJERCICIOS
+   ========================================================================== */
+.ejercicios-container {
+    margin-top: .8rem;
+    padding-left: .6rem;
+    border-left: 3px solid var(--md-primary-container);
+}
+.ejercicio-row {
+    display: flex;
+    gap: .4rem;
+    margin-bottom: .4rem;
+    align-items: center;
+}
+.ejercicio-row input {
+    margin: 0; padding: .5rem .6rem;
+    font-size: .88rem;
+    background-color: var(--md-surface);
+    border-radius: var(--radius-small);
+    border: 1px solid var(--md-outline);
+    color: var(--md-text);
+    transition: border-color var(--t-fast), background var(--t-fast);
+    margin-bottom: 0;
+}
+.ejercicio-row input:focus {
+    background-color: var(--md-primary-container);
+    border-color: var(--md-primary);
+    outline: none;
+}
+.input-ej-nombre  { flex: 2; min-width: 130px; }
+.input-ej-series  { flex: .5; min-width: 50px; }
+.input-ej-reps    { flex: .5; min-width: 50px; }
+.input-ej-desc    { flex: 1; min-width: 70px; }
+.ejercicio-row button.btn-danger {
+    width: auto; margin: 0;
+    padding: .5rem .75rem;
+    border-radius: var(--radius-small);
+    font-size: .8rem;
+}
+
+/* Drag ejercicios */
+.ejercicio-drag-row { transition: background var(--t-fast); }
+.ejercicio-drag-row.dragging-ej { opacity: .3; }
 .ejercicio-drag-row.drag-over-ej {
     background: var(--md-primary-container);
     outline: 1px solid var(--md-primary);
 }
 
 /* ==========================================================================
-   VISTA COMPLETA DE SEMANA (MENÚ)
+   VISTA SEMANA COMPLETA
    ========================================================================== */
 .vista-semana-wrapper {
-    animation: fadeIn 0.25s ease;
+    /* Animada por JS con clase reveal */
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity var(--t-med), transform var(--t-med);
 }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+.vista-semana-wrapper.reveal {
+    opacity: 1;
+    transform: none;
 }
 
 .vista-semana-header {
     margin-bottom: 1.25rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--md-surface-variant);
+    border-bottom: 1px solid var(--md-outline);
 }
-
 .tabla-semana-scroll {
     overflow-x: auto;
     border-radius: var(--radius-medium);
     box-shadow: var(--md-shadow);
 }
-
 .tabla-semana-completa {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.88rem;
-    background: #fff;
+    font-size: .85rem;
+    background: var(--md-surface);
     min-width: 600px;
 }
-
 .tabla-semana-completa th,
 .tabla-semana-completa td {
-    padding: 0.75rem 0.9rem;
-    border: 1px solid var(--md-surface-variant);
+    padding: .65rem .85rem;
+    border: 1px solid var(--md-outline);
     text-align: center;
     vertical-align: middle;
 }
-
 .th-fila-num {
     background: var(--md-surface-variant);
     color: var(--md-text-muted);
-    font-size: 0.75rem;
+    font-size: .7rem;
     width: 2.5rem;
-    font-weight: 500;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
 }
-
 .th-dia {
     background: var(--md-surface-variant);
-    font-weight: 500;
-    color: var(--md-text-muted);
-    font-size: 0.8rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    letter-spacing: .06em;
     text-transform: uppercase;
-    letter-spacing: 0.4px;
+    color: var(--md-text-muted);
+    font-size: .8rem;
     min-width: 110px;
     position: relative;
 }
-
 .th-dia.dia-hoy {
     background: var(--md-primary-container);
-    color: var(--md-on-primary-container);
-    font-weight: 700;
+    color: var(--md-primary);
 }
-
 .badge-hoy {
     display: block;
-    font-size: 0.65rem;
+    font-size: .6rem;
     background: var(--md-primary);
     color: var(--md-on-primary);
-    padding: 0.1rem 0.4rem;
-    border-radius: 999px;
-    margin-bottom: 0.3rem;
-    letter-spacing: 0.5px;
+    padding: .1rem .35rem;
+    border-radius: var(--radius-pill);
+    margin-bottom: .2rem;
+    letter-spacing: .05em;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
 }
-
 .kcal-badge {
     display: block;
-    font-size: 0.7rem;
-    color: var(--md-outline);
+    font-size: .67rem;
+    color: var(--md-text-muted);
     font-weight: 400;
-    margin-top: 0.2rem;
+    margin-top: .15rem;
 }
-
-.celda-hoy {
-    background: #f0f4ff;
-}
-
+.celda-hoy  { background: rgba(232,255,71,.04); }
 .celda-descanso {
     background: var(--md-success-container);
     color: var(--md-on-success-container);
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-align: center;
+    font-size: .78rem;
+    font-weight: 600;
+}
+.celda-vacia { color: var(--md-outline); }
+.td-num { color: var(--md-text-muted); font-size: .72rem; background: var(--md-surface-variant); }
+.ej-nombre { font-weight: 600; color: var(--md-text); margin-bottom: .15rem; }
+.ej-detalle { font-size: .72rem; color: var(--md-text-muted); }
+
+/* ==========================================================================
+   ESTADO, DIVISORES
+   ========================================================================== */
+.status-label {
+    font-weight: 600;
+    font-size: .88rem;
+    margin-top: .5rem;
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: .04em;
+}
+.border-divider {
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--md-outline);
+    padding-bottom: 1rem;
 }
 
-.celda-vacia {
-    color: var(--md-surface-variant);
-}
-
-.td-num {
-    color: var(--md-text-muted);
-    font-size: 0.75rem;
-    background: var(--md-surface);
-}
-
-.ej-nombre {
-    font-weight: 500;
-    color: var(--md-text);
-    margin-bottom: 0.2rem;
-}
-
-.ej-detalle {
-    font-size: 0.75rem;
-    color: var(--md-text-muted);
-}
-
-/* Botón de vista activa */
+/* Botón activo de vista semana */
 .btn-primary-active {
     background-color: var(--md-primary);
     color: var(--md-on-primary);
     width: auto;
-    padding: 0.5rem 1.2rem;
+    padding: .45rem 1.2rem;
     border: none;
     border-radius: var(--radius-large);
     cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
 }
+
+/* ==========================================================================
+   PANEL DE TEMAS
+   ========================================================================== */
+#theme-panel {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .5rem;
+}
+
+#btn-theme-toggle {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    background: var(--md-surface);
+    border: 1.5px solid var(--md-outline);
+    color: var(--md-text);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--md-shadow);
+    cursor: pointer;
+    transition:
+        background var(--t-fast),
+        border-color var(--t-fast),
+        transform var(--t-spring),
+        box-shadow var(--t-fast);
+}
+#btn-theme-toggle:hover {
+    border-color: var(--md-primary);
+    transform: rotate(30deg) scale(1.1);
+    box-shadow: var(--glow-primary), var(--md-shadow);
+}
+#btn-theme-toggle:active {
+    transform: rotate(0deg) scale(0.95);
+}
+
+#theme-menu {
+    background: var(--md-surface);
+    border: 1.5px solid var(--md-outline);
+    border-radius: var(--radius-medium);
+    padding: .6rem;
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    box-shadow: var(--md-shadow);
+    /* Animación colapso */
+    transform-origin: bottom right;
+    transform: scale(.85) translateY(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform var(--t-spring), opacity var(--t-fast);
+}
+#theme-menu.open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.theme-option {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .5rem .85rem;
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    font-size: .88rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--md-text);
+    transition: background var(--t-fast);
+    white-space: nowrap;
+    user-select: none;
+}
+.theme-option:hover { background: var(--md-surface-variant); }
+.theme-option.active { color: var(--md-primary); }
+.theme-swatch {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,.15);
+}
+
+/* ==========================================================================
+   MODAL — general
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    z-index: 900;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+.modal-backdrop.open { display: flex; }
+
+.modal-box {
+    background: var(--md-surface);
+    border: 1.5px solid var(--md-outline);
+    border-radius: var(--radius-large);
+    padding: 2rem;
+    min-width: 320px;
+    max-width: 90vw;
+    box-shadow: var(--md-shadow);
+    transform: translateY(20px) scale(.96);
+    opacity: 0;
+    transition: transform var(--t-spring), opacity var(--t-med);
+}
+.modal-backdrop.open .modal-box {
+    transform: none;
+    opacity: 1;
+}
+
+/* ==========================================================================
+   ANIMACIÓN DE LOADER / SKELETON VISUAL
+   ========================================================================== */
+@keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: .5; }
+}
+
+/* ==========================================================================
+   SCROLL
+   ========================================================================== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--md-surface-variant); }
+::-webkit-scrollbar-thumb {
+    background: var(--md-outline);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--md-primary); }

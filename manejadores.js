@@ -155,18 +155,76 @@ class Manejadores {
         lista.forEach((ej, i) => ej.posicion = i);
         UIController.renderSemanas();
     }
-
-    // --- REORDENAR SEMANAS ---
+// --- REORDENAR SEMANAS ---
     static handleReorderSemana(fromIdx, toIdx) {
         const store = AppStore.getInstance();
         const lista = store.cicloEditando.listaSemanas;
+        
+        // Bloqueo si intenta subir la primera o bajar la última
+        if (toIdx < 0 || toIdx >= lista.length) return;
+        
+        // Extrae la semana y la inserta en su nueva posición
         const [moved] = lista.splice(fromIdx, 1);
         lista.splice(toIdx, 0, moved);
-        // Recalcular posiciones
+        
+        // Fuerza el recálculo de la propiedad 'posicion' para la base de datos
         lista.forEach((sem, i) => sem.posicion = i);
+        
         UIController.renderSemanas();
     }
 
+    // --- CLONAR SEMANA ---
+    static handleCloneSemana(sIdx) {
+        const store = AppStore.getInstance();
+        const semanaPadre = store.cicloEditando.listaSemanas[sIdx];
+        
+        // Truco Ninja: Copia profunda desconectada
+        const clone = JSON.parse(JSON.stringify(semanaPadre));
+        
+        // Limpieza profunda de IDs (Nacen huérfanos para que la BD los cree nuevos)
+        clone.id_Semana = 0;
+        clone.nombre_semana = clone.nombre_semana + " (Clon)";
+        clone.listaDias.forEach(d => {
+            d.id_Dia = 0; d.fk_semana = 0;
+            d.listaEjercicios.forEach(e => { e.id_Ejercicio = 0; e.fk_dia = 0; });
+        });
+        
+        // Lo añadimos justo debajo de su padre
+        store.cicloEditando.listaSemanas.splice(sIdx + 1, 0, clone);
+        store.cicloEditando.listaSemanas.forEach((s, i) => s.posicion = i);
+        
+        UIController.renderSemanas();
+    }
+
+    // --- CLONAR CICLO ENTERO ---
+    static handleCloneCiclo() {
+        const store = AppStore.getInstance();
+        if (!store.cicloEditando) return;
+
+        const clone = JSON.parse(JSON.stringify(store.cicloEditando));
+        
+        clone.Id_Ciclo = 0;
+        clone.nombre = clone.nombre + " (Clon)";
+        clone.siguiendo = false;
+        clone.fechaActivacion = null;
+        
+        clone.listaSemanas.forEach(s => {
+            s.id_Semana = 0; s.fk_ciclo = 0;
+            s.listaDias.forEach(d => {
+                d.id_Dia = 0; d.fk_semana = 0;
+                d.listaEjercicios.forEach(e => { e.id_Ejercicio = 0; e.fk_dia = 0; });
+            });
+        });
+
+        store.cicloEditando = clone;
+        
+        // Engañamos a la UI para que seleccione "Crear Nuevo" y pinte el clon
+        document.getElementById('select-ciclo').value = "0"; 
+        document.getElementById('input-nuevo-ciclo').value = clone.nombre;
+        
+        UIController.renderEdit();
+        alert("¡Ciclo clonado en pantalla! Dale a 'Guardar Cambios' para consolidarlo en tu cuenta.");
+    }
     // --- LOGICA DE REGISTRAR ---
     static async handleRegister(e) {
         e.preventDefault();

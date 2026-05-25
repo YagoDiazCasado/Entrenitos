@@ -1,167 +1,186 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrenitos SPA - Dashboard</title>
+    <title>Entrenitos SPA — Dashboard</title>
     <link rel="stylesheet" href="estilos2.css">
 </head>
-
 <body>
 
-    <section id="login-view" class="view-section active-view"
-        style="max-width: 100%; padding: 0; background: transparent; box-shadow: none;">
-        <div
-            style="display: flex; min-height: 90vh; border-radius: var(--radius-large); overflow: hidden; box-shadow: var(--md-shadow);">
+<!-- ====================================================
+     VISTA: LOGIN
+     ==================================================== -->
+<section id="login-view" class="view-section active-view"
+    style="max-width:100%; padding:0; background:transparent; box-shadow:none;">
+    <div style="display:flex; min-height:90vh; border-radius:var(--radius-large); overflow:hidden; box-shadow:var(--md-shadow);">
 
-            <div
-                style="flex: 1; background: var(--md-primary); color: var(--md-on-primary); padding: 4rem; display: flex; flex-direction: column; justify-content: center;">
-                <h1 style="color: inherit; font-size: 3rem;">Entrenitos</h1>
-                <p style="font-size: 1.2rem; opacity: 0.9;">Tu ecosistema inteligente de entrenamiento. Diseña, gestiona
-                    y supera tus ciclos.</p>
-            </div>
+        <div style="flex:1; background:var(--md-primary); color:var(--md-on-primary); padding:4rem; display:flex; flex-direction:column; justify-content:center;">
+            <h1 style="color:inherit; font-size:3.5rem; margin-bottom:1rem;">Entrenitos</h1>
+            <p style="font-size:1.15rem; opacity:.88; font-family:'DM Sans',sans-serif; font-weight:300;">
+                Tu ecosistema inteligente de entrenamiento. Diseña, gestiona y supera tus ciclos.
+            </p>
+        </div>
 
-            <div
-                style="flex: 1; background: var(--md-surface); padding: 4rem; display: flex; flex-direction: column; justify-content: center;">
-                <h2 style="margin-bottom: 2rem;">Acceder a mi cuenta</h2>
-                <form id="login-form">
-                    <input type="text" id="login-id" placeholder="ID de Usuario" required>
-                    <input type="password" id="login-pwd" placeholder="Contraseña" required>
-                    <button type="submit">Entrar a mis rutinas</button>
-                </form>
-
-                <div
-                    style="margin-top: 2rem; border-top: 1px solid var(--md-surface-variant); padding-top: 1.5rem; text-align: center;">
-                    <p style="color: var(--md-text-muted); font-size: 0.9rem; margin-bottom: 1rem;">¿Primera vez aquí?
-                    </p>
-                    <button id="btn-to-register" class="btn-secondary">Crear una cuenta nueva</button>
-                </div>
+        <div style="flex:1; background:var(--md-surface); padding:4rem; display:flex; flex-direction:column; justify-content:center;">
+            <h2 style="margin-bottom:2rem;">Acceder</h2>
+            <form id="login-form">
+                <input type="text"     id="login-id"  placeholder="ID de Usuario" required>
+                <input type="password" id="login-pwd" placeholder="Contraseña"    required>
+                <button type="submit">Entrar a mis rutinas</button>
+            </form>
+            <div style="margin-top:1.5rem; border-top:1px solid var(--md-outline); padding-top:1.25rem; text-align:center;">
+                <p style="color:var(--md-text-muted); font-size:.88rem; margin-bottom:.75rem;">¿Primera vez aquí?</p>
+                <button id="btn-to-register" class="btn-secondary">Crear una cuenta nueva</button>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="register-view" class="view-section"
-        style="max-width: 100%; padding: 0; background: transparent; box-shadow: none;">
-        <div
-            style="display: flex; min-height: 90vh; border-radius: var(--radius-large); overflow: hidden; box-shadow: var(--md-shadow);">
+<!-- ====================================================
+     VISTA: REGISTRO
+     ==================================================== -->
+<section id="register-view" class="view-section"
+    style="max-width:100%; padding:0; background:transparent; box-shadow:none;">
+    <div style="display:flex; min-height:90vh; border-radius:var(--radius-large); overflow:hidden; box-shadow:var(--md-shadow);">
 
-            <div
-                style="flex: 1; background: var(--md-surface); padding: 4rem; display: flex; flex-direction: column; justify-content: center;">
-                <h2 style="margin-bottom: 2rem;">Comienza tu progreso</h2>
-                <form id="register-form">
-                    <input type="text" id="reg-id" placeholder="Elige un ID de Usuario" required>
-                    <input type="password" id="reg-pass" placeholder="Contraseña" required>
-                    <button type="submit">Registrarme y acceder</button>
-                </form>
-
-                <div
-                    style="margin-top: 2rem; border-top: 1px solid var(--md-surface-variant); padding-top: 1.5rem; text-align: center;">
-                    <button id="btn-to-login" class="btn-secondary" style="border: none; background: transparent;">← Ya
-                        tengo cuenta, volver</button>
-                </div>
-            </div>
-
-            <div
-                style="flex: 1; background: var(--md-secondary-container); color: var(--md-on-secondary-container); padding: 4rem; display: flex; flex-direction: column; justify-content: center;">
-                <h1 style="color: inherit; font-size: 2.5rem;">Únete a Entrenitos</h1>
-                <p style="font-size: 1.1rem; opacity: 0.9;">Planifica semanas, establece ejercicios y no pierdas el
-                    ritmo de tus kcal y descansos.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="menu-view" class="view-section"
-        style="max-width: 1200px; background: transparent; box-shadow: none; padding: 1rem;">
-
-        <header
-            style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--md-surface-variant); padding-bottom: 1.5rem; margin-bottom: 2.5rem;">
-            <div style="display: flex; align-items: baseline; gap: 1rem;">
-                <h1 id="menu-title" style="margin: 0; font-weight: bold; color: var(--md-primary);">Hola</h1>
-                <span style="color: var(--md-text-muted);">Panel de Control</span>
-            </div>
-
-            <div style="display: flex; gap: 1rem;">
-                <button id="btn-go-edit" class="btn-secondary"
-                    style="margin: 0; width: auto; padding: 0.6rem 1.5rem;">⚙️ Gestionar Mis Rutinas</button>
-                <button id="btn-logout" class="btn-danger"
-                    style="margin: 0; width: auto; padding: 0.6rem 1.5rem;">Salir</button>
-            </div>
-        </header>
-
-        <main>
-            <div id="entrenamiento-hoy"
-                style="background: var(--md-surface); border-radius: var(--radius-large); padding: 2.5rem; box-shadow: var(--md-shadow);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h2 style="margin: 0;">Plan de Acción para Hoy</h2>
-                    <h3 id="hoy-fecha"
-                        style="margin: 0; font-weight: 400; color: var(--md-text-muted); background: var(--md-bg); padding: 0.5rem 1rem; border-radius: var(--radius-small);">
-                        Calculando...</h3>
-                </div>
-                <div id="hoy-contenido"></div>
-            </div>
-        </main>
-    </section>
-
-    <section id="edit-view" class="view-section"
-        style="max-width: 1400px; background: transparent; box-shadow: none; padding: 1rem;">
-
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <button id="btn-go-menu" class="btn-secondary"
-                    style="margin: 0; width: auto; border-radius: 50%; padding: 0.8rem; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center;">←</button>
-                <h1 style="margin: 0;">Constructor de Ciclos</h1>
-            </div>
-
-            <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                <button id="btn-guardar-ciclo"
-                    style="margin: 0; width: auto; padding: 0.8rem 2.5rem; font-size: 1rem;">💾 Guardar Ciclo en
-                    Nube</button>
-                <span id="save-status" class="status-label"
-                    style="margin-top: 0.5rem; color: var(--md-primary);"></span>
-            </div>
-        </header>
-
-        <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
-
-            <aside
-                style="flex: 1; min-width: 300px; background: var(--md-surface); padding: 1.5rem; border-radius: var(--radius-large); box-shadow: var(--md-shadow); position: sticky; top: 2rem;">
-
-                <div style="margin-bottom: 2rem;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Mis Rutinas</h3>
-                    <select id="select-ciclo" style="margin-bottom: 0.5rem;"></select>
-
-                    <label
-                        style="background: var(--md-secondary-container); padding: 0.8rem; border-radius: var(--radius-small); width: 100%; display: flex;">
-                        <input type="checkbox" id="chk-ciclo-activo"> Activar como mi rutina actual
-                    </label>
-                </div>
-
-                <div style="border-top: 1px solid var(--md-surface-variant); padding-top: 1.5rem;">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Empezar de cero</h3>
-                    <input type="text" id="input-nuevo-ciclo" placeholder="Nombre (ej: Hipertrofia)">
-                    <button id="btn-crear-ciclo" class="btn-secondary" style="margin: 0;">+ Crear Nuevo Ciclo</button>
-                </div>
-            </aside>
-
-            <main style="flex: 3; min-width: 600px;">
-                <div id="semanas-container"></div>
-
-                <button id="btn-add-semana" class="btn-secondary"
-                    style="width: 100%; border: 2px dashed var(--md-primary); background: transparent; padding: 1.25rem; font-size: 1rem; margin-top: 1rem;">
-                    + Añadir nueva semana a este ciclo
+        <div style="flex:1; background:var(--md-surface); padding:4rem; display:flex; flex-direction:column; justify-content:center;">
+            <h2 style="margin-bottom:2rem;">Comienza tu progreso</h2>
+            <form id="register-form">
+                <input type="text"     id="reg-id"   placeholder="Elige un ID de Usuario" required>
+                <input type="password" id="reg-pass" placeholder="Contraseña"              required>
+                <button type="submit">Registrarme y acceder</button>
+            </form>
+            <div style="margin-top:1.5rem; border-top:1px solid var(--md-outline); padding-top:1.25rem; text-align:center;">
+                <button id="btn-to-login" class="btn-secondary" style="border:none; background:transparent;">
+                    ← Ya tengo cuenta, volver
                 </button>
-            </main>
-
+            </div>
         </div>
-    </section>
 
-    <script src="app.js"></script>
-    <script src="manejadores.js"></script>
-    <script src="ui.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => UIController.init());
-    </script>
+        <div style="flex:1; background:var(--md-secondary-container); color:var(--md-on-secondary-container); padding:4rem; display:flex; flex-direction:column; justify-content:center;">
+            <h1 style="color:inherit; font-size:2.8rem; margin-bottom:1rem;">Únete</h1>
+            <p style="font-size:1.1rem; opacity:.88; font-family:'DM Sans',sans-serif; font-weight:300;">
+                Planifica semanas, establece ejercicios y no pierdas el ritmo de tus kcal y descansos.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ====================================================
+     VISTA: MENÚ (HOY)
+     ==================================================== -->
+<section id="menu-view" class="view-section"
+    style="max-width:1200px; background:transparent; box-shadow:none; padding:1rem;">
+
+    <header style="display:flex; justify-content:space-between; align-items:center;
+        border-bottom:2px solid var(--md-outline); padding-bottom:1.5rem; margin-bottom:2.5rem;">
+        <div style="display:flex; align-items:baseline; gap:1rem;">
+            <h1 id="menu-title" style="margin:0; color:var(--md-primary);">Hola</h1>
+            <span style="color:var(--md-text-muted); font-size:.9rem; font-family:'DM Sans',sans-serif;">Panel de Control</span>
+        </div>
+        <div style="display:flex; gap:.75rem;">
+            <button id="btn-go-edit" class="btn-secondary"
+                style="margin:0; width:auto; padding:.6rem 1.4rem;">⚙️ Gestionar Mis Rutinas</button>
+            <button id="btn-logout" class="btn-danger"
+                style="margin:0; width:auto; padding:.6rem 1.4rem;">Salir</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="entrenamiento-hoy"
+            style="background:var(--md-surface); border-radius:var(--radius-large); padding:2.5rem; box-shadow:var(--md-shadow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                <h2 style="margin:0;">Plan de Acción para Hoy</h2>
+                <h3 id="hoy-fecha"
+                    style="margin:0; font-weight:400; color:var(--md-text-muted);
+                    background:var(--md-surface-variant); padding:.45rem 1rem;
+                    border-radius:var(--radius-small); font-family:'DM Sans',sans-serif; font-size:.95rem;">
+                    Calculando...
+                </h3>
+            </div>
+            <div id="hoy-contenido"></div>
+        </div>
+    </main>
+</section>
+
+<!-- ====================================================
+     VISTA: EDITOR DE CICLOS
+     ==================================================== -->
+<section id="edit-view" class="view-section"
+    style="max-width:1400px; background:transparent; box-shadow:none; padding:1rem;">
+
+    <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+        <div style="display:flex; align-items:center; gap:1rem;">
+            <button id="btn-go-menu" class="btn-secondary"
+                style="margin:0; width:45px; height:45px; border-radius:50%; padding:0;
+                display:flex; align-items:center; justify-content:center; font-size:1.1rem;">←</button>
+            <h1 style="margin:0;">Constructor de Ciclos</h1>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end;">
+            <button id="btn-guardar-ciclo"
+                style="margin:0; width:auto; padding:.75rem 2.25rem; font-size:1rem;">
+                💾 Guardar Ciclo en Nube
+            </button>
+            <span id="save-status" class="status-label" style="margin-top:.4rem; color:var(--md-primary);"></span>
+        </div>
+    </header>
+
+    <div style="display:flex; gap:2rem; align-items:flex-start; flex-wrap:wrap;">
+
+        <!-- SIDEBAR -->
+        <aside style="flex:1; min-width:280px; background:var(--md-surface); padding:1.5rem;
+            border-radius:var(--radius-large); box-shadow:var(--md-shadow);
+            position:sticky; top:2rem; border:1.5px solid var(--md-outline);">
+
+            <div style="margin-bottom:1.75rem;">
+                <h3 style="font-size:1rem; margin-bottom:.75rem; color:var(--md-text-muted);">Mis Rutinas</h3>
+                <select id="select-ciclo" style="margin-bottom:.75rem;"></select>
+                <label style="background:var(--md-surface-variant); padding:.75rem; border-radius:var(--radius-small);
+                    width:100%; display:flex; border:1px solid var(--md-outline);">
+                    <input type="checkbox" id="chk-ciclo-activo"> Activar como mi rutina actual
+                </label>
+            </div>
+
+            <div style="border-top:1px solid var(--md-outline); padding-top:1.5rem; margin-bottom:1.75rem;">
+                <h3 style="font-size:1rem; margin-bottom:.75rem; color:var(--md-text-muted);">Empezar de cero</h3>
+                <input type="text" id="input-nuevo-ciclo" placeholder="Nombre (ej: Hipertrofia)">
+                <button id="btn-crear-ciclo" class="btn-secondary" style="margin:0; width:100%;">+ Crear Nuevo Ciclo</button>
+            </div>
+
+            <div style="border-top:1px solid var(--md-outline); padding-top:1.5rem;">
+                <h3 style="font-size:1rem; margin-bottom:.75rem; color:var(--md-text-muted);">Acciones</h3>
+                <button class="btn-secondary" style="margin:0; width:100%; margin-bottom:.6rem;"
+                    onclick="Manejadores.handleCloneCiclo()">
+                    ⧉ Clonar ciclo actual
+                </button>
+            </div>
+        </aside>
+
+        <!-- ÁREA PRINCIPAL -->
+        <main style="flex:3; min-width:min(600px, 100%);">
+            <div id="semanas-container"></div>
+
+            <button id="btn-add-semana" class="btn-secondary"
+                style="width:100%; border:2px dashed var(--md-outline);
+                background:transparent; padding:1.1rem; font-size:.95rem;
+                margin-top:1rem; color:var(--md-text-muted);">
+                + Añadir nueva semana a este ciclo
+            </button>
+        </main>
+    </div>
+</section>
+
+<!-- ====================================================
+     SCRIPTS (orden importante)
+     ==================================================== -->
+<script src="app.js"></script>
+<script src="manejadores.js"></script>
+<script src="animacionesYEfectos.js"></script>
+<script src="ui.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => UIController.init());
+</script>
+
 </body>
-
 </html>

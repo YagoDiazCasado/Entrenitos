@@ -1,0 +1,664 @@
+/* ==========================================================================
+   VARIABLES Y ESTILOS BASE (MATERIAL YOU / MD3)
+   ========================================================================== */
+:root {
+    /* Paleta Tonal Orgánica (Dynamic Tones - Estilo Arándano/Lavanda) */
+    --md-bg: #f8f9ff;
+    --md-surface: #f1f3fa;
+    --md-surface-variant: #e1e2ec;
+
+    --md-primary: #3f5f90;
+    --md-on-primary: #ffffff;
+    --md-primary-container: #d6e3ff;
+    --md-on-primary-container: #001b3e;
+
+    --md-secondary-container: #e8def8;
+    --md-on-secondary-container: #1d192b;
+
+    --md-text: #191c20;
+    --md-text-muted: #43474e;
+    --md-outline: #74777f;
+
+    /* Estados Semánticos MD3 */
+    --md-success-container: #c4eed2;
+    --md-on-success-container: #062e15;
+    --md-danger: #ba1a1a;
+    --md-danger-container: #ffdad6;
+    --md-on-danger-container: #410002;
+
+    /* Radios y Sombras MD3 */
+    --radius-small: 8px;
+    --radius-medium: 16px;
+    --radius-large: 28px;
+    --md-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--md-bg);
+    color: var(--md-text);
+    padding: 1.5rem;
+    letter-spacing: 0.1px;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   ESTRUCTURAS DE NAVEGACIÓN Y VISTAS
+   ========================================================================== */
+.view-section {
+    display: none;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 2.5rem;
+    border-radius: var(--radius-large);
+    box-shadow: var(--md-shadow);
+}
+
+.view-section.active-view {
+    display: block;
+}
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: var(--md-text);
+    margin-bottom: 1.5rem;
+}
+
+h2,
+h3,
+h4 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--md-text);
+    margin-bottom: 1rem;
+}
+
+/* Controles de Formulario (Filled Input Style corregido para Password) */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.25rem;
+    background-color: var(--md-surface-variant);
+    color: var(--md-text);
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: var(--radius-small) var(--radius-small) 0 0;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    background-color: #e9eaf2;
+    border-bottom-color: var(--md-primary);
+}
+
+/* Botones Estándar */
+button {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    margin-bottom: 1.25rem;
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: var(--radius-large);
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+button:hover {
+    opacity: 0.92;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn-secondary {
+    background-color: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+}
+
+.btn-secondary:hover {
+    background-color: #c4d4f8;
+}
+
+.btn-danger {
+    background-color: var(--md-danger-container);
+    color: var(--md-on-danger-container);
+}
+
+.btn-danger:hover {
+    background-color: #ffccc7;
+}
+
+/* ==========================================================================
+   DISEÑO FLEXIBLE Y EVITACIÓN DE CHOQUES visuales
+   ========================================================================== */
+.flex-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    /* Previene el desbordamiento en pantallas móviles */
+}
+
+/* Anula márgenes inferiores dentro de flujos en línea */
+.flex-row input,
+.flex-row button,
+.flex-row select {
+    margin-bottom: 0;
+}
+
+/* Gestión de anchos fijos o proporcionales sin colisiones */
+.w-70 {
+    flex: 1 1 60%;
+    min-width: 200px;
+}
+
+.w-25 {
+    flex: 0 0 auto;
+    width: auto;
+}
+
+/* Botones en línea específicos (Acciones secundarias) */
+.btn-inline {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+
+/* Elementos de Selección y Checkbox */
+input[type="checkbox"] {
+    accent-color: var(--md-primary);
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--md-text-muted);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* ==========================================================================
+   PANELES DINÁMICOS E INFO (MENÚ PRINCIPAL)
+   ========================================================================== */
+.info-box {
+    padding: 1.25rem;
+    border-radius: var(--radius-medium);
+    margin-bottom: 1.5rem;
+    background-color: var(--md-surface-variant);
+    color: var(--md-text);
+}
+
+.info-box.success {
+    background-color: var(--md-success-container);
+    color: var(--md-on-success-container);
+}
+
+.info-box.danger {
+    background-color: var(--md-danger-container);
+    color: var(--md-on-danger-container);
+}
+
+.info-box p {
+    font-weight: 500;
+}
+
+.info-box .sub-text {
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-top: 0.4rem;
+}
+
+/* ==========================================================================
+   TABLAS DE EJERCICIOS (MATERIAL SURFACE TABLE)
+   ========================================================================== */
+.excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-size: 0.9rem;
+    background-color: #ffffff;
+    border-radius: var(--radius-medium);
+    overflow: hidden;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.excel-table th,
+.excel-table td {
+    padding: 0.85rem 1rem;
+    border: none;
+    border-bottom: 1px solid var(--md-surface-variant);
+    text-align: left;
+}
+
+.excel-table th {
+    background-color: var(--md-surface-variant);
+    font-weight: 500;
+    color: var(--md-text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.excel-table td input {
+    width: 100%;
+    margin: 0;
+    padding: 0.4rem;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    font-size: 0.95rem;
+    transition: background 0.2s;
+}
+
+.excel-table td input:focus {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    outline: none;
+}
+
+/* ==========================================================================
+   CONTENEDORES DE GESTIÓN (SEMANAS, DÍAS Y EJERCICIOS)
+   ========================================================================== */
+.semana-block {
+    background: var(--md-surface);
+    padding: 1.5rem;
+    margin-bottom: 1.75rem;
+    border-radius: var(--radius-large);
+    border: none;
+}
+
+.semana-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--md-surface-variant);
+    cursor: pointer;
+    user-select: none;
+}
+
+.semana-header h3 {
+    margin: 0;
+    color: var(--md-primary);
+    font-weight: 500;
+}
+
+.semana-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Desplegables animados */
+.dias-container {
+    display: none;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1rem;
+}
+
+.dias-container.expanded {
+    display: flex;
+}
+
+/* Tarjeta de Día */
+.dia-card,
+.dia-block {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: var(--radius-medium);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--md-surface-variant);
+}
+
+/* Botón interno de la tarjeta de día corregido */
+.dia-card button {
+    width: auto;
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+    display: inline-block;
+}
+
+.dia-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.dia-header h4 {
+    margin: 0;
+    font-weight: 500;
+    flex-grow: 1;
+    min-width: 120px;
+}
+
+/* Ajuste sutil del input calórico */
+.input-kcal {
+    width: 110px !important;
+    margin: 0 !important;
+    padding: 0.5rem !important;
+    font-size: 0.9rem;
+    border-radius: var(--radius-small);
+}
+
+/* Contenedor de hileras de ejercicios */
+.ejercicios-container {
+    margin-top: 1rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid var(--md-primary-container);
+}
+
+.ejercicio-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.ejercicio-row input {
+    margin: 0;
+    padding: 0.6rem;
+    font-size: 0.9rem;
+    background-color: var(--md-bg);
+    border-radius: var(--radius-small);
+    margin-bottom: 0;
+}
+
+.ejercicio-row input:focus {
+    background-color: var(--md-primary-container);
+}
+
+.input-ej-nombre {
+    flex: 2;
+    min-width: 140px;
+}
+
+.input-ej-series {
+    flex: 0.5;
+    min-width: 50px;
+}
+
+.input-ej-reps {
+    flex: 0.5;
+    min-width: 50px;
+}
+
+.input-ej-desc {
+    flex: 1;
+    min-width: 80px;
+}
+
+/* Botón eliminar (X) en hileras de ejercicios */
+.ejercicio-row button.btn-danger {
+    width: auto;
+    margin: 0;
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-small);
+}
+
+/* Etiquetas de Estado e Interfaces Limpias */
+.status-label {
+    font-weight: 500;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+    display: block;
+}
+
+.border-divider {
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--md-surface-variant);
+    padding-bottom: 1.25rem;
+}
+/* ==========================================================================
+   DRAG & DROP - SEMANAS
+   ========================================================================== */
+.semana-block {
+    transition: opacity 0.2s ease, transform 0.15s ease;
+    cursor: default;
+}
+
+.semana-block.dragging-semana {
+    opacity: 0.4;
+    transform: scale(0.98);
+}
+
+.semana-block.drag-over-semana {
+    outline: 2px dashed var(--md-primary);
+    outline-offset: 4px;
+    background: var(--md-primary-container);
+}
+
+.drag-handle-semana {
+    cursor: grab;
+    font-size: 1.2rem;
+    color: var(--md-outline);
+    padding: 0 0.5rem;
+    user-select: none;
+    flex-shrink: 0;
+}
+
+.drag-handle-semana:active {
+    cursor: grabbing;
+}
+
+.semana-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--md-surface-variant);
+    user-select: none;
+    gap: 0.5rem;
+}
+
+/* Input de nombre de semana inline */
+.semana-nombre-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--md-primary);
+    width: auto;
+    min-width: 180px;
+    max-width: 300px;
+    margin: 0;
+    cursor: text;
+    transition: border-bottom-color 0.2s;
+}
+
+.semana-nombre-input:focus {
+    background: transparent;
+    border-bottom-color: var(--md-primary);
+    outline: none;
+}
+
+.semana-nombre-input::placeholder {
+    color: var(--md-outline);
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.semana-expand-icon {
+    font-size: 0.8rem;
+    color: var(--md-text-muted);
+    margin-left: 0.5rem;
+}
+
+/* ==========================================================================
+   DRAG & DROP - EJERCICIOS
+   ========================================================================== */
+.ejercicio-drag-row {
+    transition: background 0.15s ease;
+}
+
+.ejercicio-drag-row.dragging-ej {
+    opacity: 0.3;
+}
+
+.ejercicio-drag-row.drag-over-ej {
+    background: var(--md-primary-container);
+    outline: 1px solid var(--md-primary);
+}
+
+/* ==========================================================================
+   VISTA COMPLETA DE SEMANA (MENÚ)
+   ========================================================================== */
+.vista-semana-wrapper {
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.vista-semana-header {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--md-surface-variant);
+}
+
+.tabla-semana-scroll {
+    overflow-x: auto;
+    border-radius: var(--radius-medium);
+    box-shadow: var(--md-shadow);
+}
+
+.tabla-semana-completa {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    background: #fff;
+    min-width: 600px;
+}
+
+.tabla-semana-completa th,
+.tabla-semana-completa td {
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--md-surface-variant);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.th-fila-num {
+    background: var(--md-surface-variant);
+    color: var(--md-text-muted);
+    font-size: 0.75rem;
+    width: 2.5rem;
+    font-weight: 500;
+}
+
+.th-dia {
+    background: var(--md-surface-variant);
+    font-weight: 500;
+    color: var(--md-text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    min-width: 110px;
+    position: relative;
+}
+
+.th-dia.dia-hoy {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+    font-weight: 700;
+}
+
+.badge-hoy {
+    display: block;
+    font-size: 0.65rem;
+    background: var(--md-primary);
+    color: var(--md-on-primary);
+    padding: 0.1rem 0.4rem;
+    border-radius: 999px;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.5px;
+}
+
+.kcal-badge {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--md-outline);
+    font-weight: 400;
+    margin-top: 0.2rem;
+}
+
+.celda-hoy {
+    background: #f0f4ff;
+}
+
+.celda-descanso {
+    background: var(--md-success-container);
+    color: var(--md-on-success-container);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.celda-vacia {
+    color: var(--md-surface-variant);
+}
+
+.td-num {
+    color: var(--md-text-muted);
+    font-size: 0.75rem;
+    background: var(--md-surface);
+}
+
+.ej-nombre {
+    font-weight: 500;
+    color: var(--md-text);
+    margin-bottom: 0.2rem;
+}
+
+.ej-detalle {
+    font-size: 0.75rem;
+    color: var(--md-text-muted);
+}
+
+/* Botón de vista activa */
+.btn-primary-active {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+    width: auto;
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: var(--radius-large);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
